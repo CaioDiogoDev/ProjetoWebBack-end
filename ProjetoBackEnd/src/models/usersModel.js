@@ -1,5 +1,5 @@
 const {DataTypes, Op} = require("sequelize")
-const sequelize = require("../helpers/bd")
+const sequelize = require("./DAO/connection")
 
 const AdminModel = sequelize.define('Usuarios',
     {
@@ -19,6 +19,10 @@ const AdminModel = sequelize.define('Usuarios',
             allowNull: true
         },
         password:{
+            type: DataTypes.STRING,
+            allowNull: true
+        },
+        tipUsuario:{
             type: DataTypes.STRING,
             allowNull: true
         }
