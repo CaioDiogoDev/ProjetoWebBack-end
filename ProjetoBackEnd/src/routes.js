@@ -1,8 +1,12 @@
 const express = require('express');
-const router = requeire('./rotas');
 
+const {verificaToken} = require('./extensions/validador');
 const app = express();
 
-app.use(router);
+
+
+
+app.use(verificaToken) // todas as rotas que eu passar depois daqui vai verificar token. 
+
 
 module.exports = app;

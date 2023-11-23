@@ -1,4 +1,4 @@
-const express = require('express');
+const jwt = require('jsonwebtoken');
 
 function validaTexto(texto){
     if (!texto || !texto.trim()) {
@@ -16,4 +16,24 @@ function validarCampoNumerico(valor) {
     }
 }
 
-module.exports = {validaTexto, validarCampoNumerico}
+function verificaToken(req, res, next){
+    const token = req.headers['authorization'];
+
+    if(!token){
+        return res.status(403).json({error: 'Token necessario'})
+    }
+    jwt.verify(jwt, process.env.SECRET, (err, userInfo) => {
+        if (err) {
+            res.status(403).end();
+            return;
+        }
+
+        res.json(userInfo);
+    });
+
+
+    req.userId = decode.id
+}
+
+
+module.exports = {validaTexto, validarCampoNumerico,verificaToken}

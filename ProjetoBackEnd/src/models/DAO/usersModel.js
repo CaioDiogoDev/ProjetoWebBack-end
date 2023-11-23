@@ -1,7 +1,5 @@
 const {DataTypes, Op} = require("sequelize")
-const sequelize = require("./DAO/connection")
-const validaTexto = require('./extensions/validaTexto')
-const validaNumero = require('./extensions/validarCampoNumerico')
+const sequelize = require("./connection")
 
 const Usuarios = sequelize.define('Usuarios',
     {
@@ -36,12 +34,6 @@ module.exports = {
 
     save: async function(nome, codigo , telefone, password, tipUsuario){
         try{
-            validaTexto(nome);
-            validaNumero(codigo);
-            validaTexto(telefone);
-            validaTexto(password);
-            validaTexto(tipUsuario);
-
             const novoUsuario = await Usuarios.create({
                 nome,
                 codigo,
@@ -53,6 +45,26 @@ module.exports = {
         }
         catch{
             console.log('Não foi possivel salvar o ${Usuarios.nome}');
+            throw error;
         }
     },
+
+    update : async function(nome, codigo){
+        return await Usuarios.update()
+    },
+    
+    getByidName: async function(nome, codigo) {
+        try {
+            return await Usuarios.findOne({
+                where: {
+                    nome: nome,
+                    codigo: codigo
+                }
+            });
+        } catch (error) {
+           
+            console.error("Erro ao buscar usuário por nome e código:", error);
+            throw error;
+        }
+    }
 }

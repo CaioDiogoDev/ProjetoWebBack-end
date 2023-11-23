@@ -3,11 +3,14 @@ const path = require('path');
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 
+const routes = require('./routes')
+
+
 const app = express();
 app.use(express.json())
 app.use(express.static(path.join(__dirname, 'public')))
 
-app.get('/', (req, res) => res.send("Hello Word"));
+app.use(routes);
 
 app.listen(3000, () => console.log("Server Rodando"));
 
