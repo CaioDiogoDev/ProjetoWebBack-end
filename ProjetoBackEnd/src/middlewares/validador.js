@@ -1,3 +1,4 @@
+const { response } = require('express');
 const jwt = require('jsonwebtoken');
 
 function validaTexto(texto){
@@ -35,5 +36,12 @@ function verificaToken(req, res, next){
     req.userId = decode.id
 }
 
+const verificaBodyLogin = (req, res, next) =>{
+    const  {body} = req;
+    if(body.nome !== null && body.nome !== undefined && body.password !== null && body.password !== undefined){
+       return response.status(400).json({message: 'Necessario informar nome  e password'})
+    }
+}
 
-module.exports = {validaTexto, validarCampoNumerico,verificaToken}
+
+module.exports = {validaTexto, validarCampoNumerico,verificaToken,verificaBodyLogin}

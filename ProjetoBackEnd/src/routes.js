@@ -1,12 +1,15 @@
 const express = require('express');
+const  router = express.Router();
 
-const {verificaToken} = require('./extensions/validador');
-const app = express();
+const controller = require('./controller/AuthController');
+const validador = require('./middlewares/validador');
 
-
-
-
-app.use(verificaToken) // todas as rotas que eu passar depois daqui vai verificar token. 
+const { verificarLogin } = require('./controller/AuthController')
 
 
-module.exports = app;
+router.post('/login', validador.verificaBodyLogin, verificarLogin);
+
+router.use(validador.verificaToken); // todas as rotas que eu passar depois daqui vai verificar token. 
+
+
+module.exports = router;

@@ -28,7 +28,7 @@ const Usuarios = sequelize.define('Usuarios',
 )
 module.exports = {
     list: async function() {
-        const usuario = await Usuarios.findAll({})
+        const usuario = await Usuarios.findAll()
         return usuario;
     },
 
@@ -53,12 +53,12 @@ module.exports = {
         return await Usuarios.update()
     },
     
-    getByidName: async function(nome, codigo) {
+    getByidName: async function(nome, password) {
         try {
             return await Usuarios.findOne({
                 where: {
                     nome: nome,
-                    codigo: codigo
+                    password: password
                 }
             });
         } catch (error) {
