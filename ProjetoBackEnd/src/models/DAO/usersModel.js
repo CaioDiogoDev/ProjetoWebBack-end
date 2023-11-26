@@ -1,5 +1,6 @@
 const {DataTypes, Op} = require("sequelize")
 const sequelize = require("./connection")
+const { json } = require("body-parser")
 
 const Usuarios = sequelize.define('Usuarios',
     {
@@ -9,7 +10,7 @@ const Usuarios = sequelize.define('Usuarios',
         },
         codigo:{
             type: DataTypes.INTEGER,
-            autoIncremeent: true,
+            autoIncrement: true,
             primaryKey: true
         },
         telefone: {
@@ -32,19 +33,19 @@ module.exports = {
         return usuario;
     },
 
-    save: async function(nome, codigo , telefone, password, tipUsuario){
-        try{
+    save: async function (nome, telefone, password, tipUsuario) {
+        try {
             const novoUsuario = await Usuarios.create({
                 nome,
-                codigo,
                 telefone,
                 password,
                 tipUsuario
             });
-            console.log('Novo usuario ${Usuarios.nome} salvo com sucesso');
-        }
-        catch{
-            console.log('Não foi possivel salvar o ${Usuarios.nome}');
+            console.log('Novo usuário salvo com sucesso');
+            return novoUsuario;
+
+        } catch (error) {
+            console.error('Não foi possível salvar o usuário', error.message);
             throw error;
         }
     },

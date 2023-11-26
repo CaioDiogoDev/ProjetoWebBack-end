@@ -6,6 +6,7 @@ const validador = require('./middlewares/validador');
 
 const { verificarLogin } = require('./controller/AuthController')
 
+router.get('/install', controller.install);
 
 router.post('/login', validador.verificaBodyLogin, verificarLogin);
 

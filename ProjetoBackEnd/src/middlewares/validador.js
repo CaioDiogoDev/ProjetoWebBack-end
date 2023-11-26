@@ -1,5 +1,10 @@
 const { response } = require('express');
 const jwt = require('jsonwebtoken');
+const bodyParser = require('body-parser');
+const express = require('express');
+const app = express();
+
+app.use(bodyParser.json()); 
 
 function validaTexto(texto){
     if (!texto || !texto.trim()) {
@@ -38,9 +43,10 @@ function verificaToken(req, res, next){
 
 const verificaBodyLogin = (req, res, next) =>{
     const  {body} = req;
-    if(body.nome !== null && body.nome !== undefined && body.password !== null && body.password !== undefined){
-       return response.status(400).json({message: 'Necessario informar nome  e password'})
+    if(!body.nome || !body.password){
+       return res.status(400).json({message: 'Necessario informar nome  e password'})
     }
+    next();
 }
 
 
