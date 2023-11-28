@@ -66,6 +66,22 @@ const verificaCadastroAdmin = (req, res, next) => {
      next();
 }
 
+const verificaDeleteUsuario = (req, res, next) => {
+    const {body} = req;
+    if(!body.nome && !body.password && !body.telefone){
+        return res.status(400).json({message: 'Necessario todos os dados para localizar usuario a ser excluido.'})
+     }
+     next();
+}
+
+const verificaUpdateUsuario = (req, res, next) => {
+    const {body} = req;
+    if(!body.nome && !body.telefone && !body.tipUsuario){
+        return res.status(400).json({message: 'Necessario informar esses dados para atualiazar dados.'})
+     }
+     next();
+}
+
 
 module.exports = {
     validaTexto, 
@@ -73,5 +89,8 @@ module.exports = {
     verificaToken,
     verificaBodyLogin,
     verificaCadastroUsuario,
-    verificaCadastroAdmin
+    verificaCadastroAdmin,
+    verificaDeleteUsuario,
+    verificaUpdateUsuario
+
 }

@@ -79,5 +79,16 @@ module.exports = {
             console.error("Erro ao buscar usuário por nome e código:", error);
             throw error;
         }
-    }
+    },
+    delete: async function(nome, telefone, id) {
+         const user = await Usuarios.findOne({
+            where: {
+                nome: nome,
+                telefone: telefone,
+                id: id
+            }
+         })
+        return user.destroy()
+    },
+
 }

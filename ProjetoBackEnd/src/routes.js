@@ -10,13 +10,17 @@ router.get('/install', controller.install);
 
 router.post('/login', validador.verificaBodyLogin, controller.verificarLogin);
 
-router.post('/CadastroUsuario', validador.verificaCadastroUsuario, controller.cadastroUsuario);
+router.post('/cadastroUsuario', validador.verificaCadastroUsuario, controller.cadastroUsuario);
 
 
+
+router.put('/atualizaCadastro', validador.verificaCadastroUsuario, controller.cadastroUsuario);
 
 
 router.use(validador.verificaToken); // todas as rotas que eu passar depois daqui vai verificar token. 
 
-router.post('/CadastroAdmin', validador.verificaCadastroAdmin, controller.cadastroAdmin);
+router.post('/cadastroAdmin', validador.verificaCadastroAdmin, controller.cadastroAdmin);
+
+router.delete('/deleteUsuario', validador.deleteUsuario, controller.deleteUsuario);
 
 module.exports = router;

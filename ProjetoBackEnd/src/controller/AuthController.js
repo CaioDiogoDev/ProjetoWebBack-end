@@ -3,6 +3,7 @@ const ProntuarioModel = require('../models/DAO/ProntuarioModel')
 const bd = require('../models/DAO/connection')
 
 const jwt = require('jsonwebtoken');
+const usersModel = require('../models/DAO/usersModel');
 
 function createToken(id, userName){
     return jwt.sign({id, userName}, process.env.SECRET, {expiresIn: '1h'});
@@ -18,16 +19,16 @@ const verificarLogin = async (req, res) => {
         
             if (tipoUsuario === 'admin') {
                 const token = createToken(codigo, nome);
-                res.status(200).json({ ...verificaUsuarioCadastrado.dataValues, token });
+                return res.status(200).json({ ...verificaUsuarioCadastrado.dataValues, token });
             } else {
-                res.status(200).json(verificaUsuarioCadastrado.dataValues);
+               return res.status(200).json(verificaUsuarioCadastrado.dataValues);
             }
         } else {
-            res.status(401).json({ error: 'Acesso não permitido' });
+           return res.status(401).json({ error: 'Acesso não permitido' });
         }        
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Erro interno do servidor' });
+       return res.status(500).json({ error: 'Erro interno do servidor' });
     }
 };
 
@@ -75,9 +76,9 @@ const install = async (req, res ) => {
 const cadastroUsuario = async (req, res) => {
     try {
         const cadastroUser = await UsersModel.save(req.body.nome, req.body.password,req.body.telefone);
-        return cadastroUser;
+        return  res.status(201).json({ mensagem: 'Cadastro do usuario realizado com sucesso', cadastroUser});
     } catch (error) {
-        res.status(500).json({ error: 'Erro interno do servidor' });
+       return res.status(500).json({ error: 'Erro interno do servidor' });
     }
     
 }
@@ -94,16 +95,45 @@ const cadastroAdmin = async (req, res) => {
                 return res.status(401).json({ error: 'Cadastro não permitido - Token inválido' });
             }
             const cadastroAdmin = await UsersModel.save(req.body.nome, req.body.password, req.body.telefone);
-            res.status(201).json({ mensagem: 'Cadastro do admin realizado com sucesso', usuario: cadastroAdmin });
+            return res.status(201).json({ mensagem: 'Cadastro do admin realizado com sucesso', usuario: cadastroAdmin });
         });
-    } catch (error) {
-        res.status(500).json({ error: 'Erro interno do servidor' });
+    }catch (error) {
+       return res.status(500).json({ error: 'Erro interno do servidor' });
     }
 };
+
+const deleteUsuario = async (req, res) => {
+    try {
+        const token = req.header('Authorization');
+
+        if (!token) {
+            return res.status(401).json({ error: 'Operação de exclusão invalida - Token não fornecido' });
+        }
+
+        jwt.verify(token, process.env.SECRET, async (erro) => {
+            if (erro) {
+                return res.status(401).json({ error: 'Operação de exclusão invalida - Token inválido' });
+            }
+            const cadastroAdmin = await UsersModel.delete(req.body.nome, req.body.telefone,  req.body.id);
+            return res.status(204).json({ mensagem: 'Usuario excluido com sucesso', usuario: cadastroAdmin });
+        });
+    }catch (error) {
+       return res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+};
+
+const UpdateUsuario = async (req, res) => {
+    const verificaUsuarioCadastrado = await UsersModel.getByidName(req.body.nome, req.body.password);
+    const tipoUsuario = verificaUsuarioCadastrado.dataValues.tipUsuario;
+    //if(tipoUsuario === "admin"){
+     //   const updateUser = await usersModel.update()
+    //}
+}
 
 module.exports = { 
     verificarLogin,
     install,
     cadastroUsuario,
-    cadastroAdmin
+    cadastroAdmin,
+    deleteUsuario
 };
