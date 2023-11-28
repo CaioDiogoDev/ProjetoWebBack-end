@@ -56,10 +56,10 @@ module.exports = {
         }
     },
 
-    update : async function(nome, codigo,telefone){
+    update : async function(nome, telefone, tipUsuario){
         try {
             
-            return await Usuarios.save({nome: nome, codigo: codigo, telefone: telefone})
+            return await Usuarios.save({nome: nome, telefone: telefone, tipUsuario: tipUsuario})
 
         } catch (error) {
             console.error("Erro ao dados do cliente.", error);

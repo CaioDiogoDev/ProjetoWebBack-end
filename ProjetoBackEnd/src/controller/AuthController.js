@@ -39,34 +39,28 @@ const install = async (req, res ) => {
 
    const usuariosData = [
     { nome: "caio", telefone: "43-998181781", password: "senha123", tipoUsuario: "admin" },
+    { nome: "ingrid", telefone: "43-998181781", password: "senha1234", tipoUsuario: "user" },
+    { nome: "maria", telefone: "43-998181221", password: "senha122", tipoUsuario: "user" },
+    { nome: "nathalia", telefone: "43-998181441", password: "senha13", tipoUsuario: "user" },
+    { nome: "antonio", telefone: "43-998181681", password: "senha153", tipoUsuario: "user" },
+    { nome: "luis", telefone: "43-998181661", password: "senha183", tipoUsuario: "user" },
+    { nome: "alberto", telefone: "43-998151781", password: "senha193", tipoUsuario: "user" },
+    { nome: "adriano", telefone: "43-998781781", password: "senha119", tipoUsuario: "admin" },
+
     
     ];
     const prontuariosData = [
         { situacaoPaciente: "gripe", dataRegistro: "2023-11-26", remedioPrescrito: "dramin", sintomas: "dor no corpo, dor de cabeça" },
-        
+        { situacaoPaciente: "virose", dataRegistro: "2023-10-26", remedioPrescrito: "Tiorfan", sintomas: "diarreia" },
+        { situacaoPaciente: "garganta inflamada", dataRegistro: "2023-11-12", remedioPrescrito: "ibuprofeno", sintomas: "dor de garganta" },
+        { situacaoPaciente: "dengue", dataRegistro: "2023-11-12", remedioPrescrito: "dramin", sintomas: "dor no corpo, dor de cabeça" },
+        { situacaoPaciente: "covid", dataRegistro: "2023-11-15", remedioPrescrito: "paxlovid", sintomas: "dor no corpo, dor de cabeça mais perda de paladar" },
+        { situacaoPaciente: "malaria", dataRegistro: "2023-11-25", remedioPrescrito: "tafenoquina", sintomas: "febre alta, calafrio" },
+        { situacaoPaciente: "febre", dataRegistro: "2023-11-20", remedioPrescrito: "dramin", sintomas: "febre alta, calafrio" },
+        { situacaoPaciente: "h1n1", dataRegistro: "2023-11-22", remedioPrescrito: "dramin", sintomas: "dor no corpo, dor de cabeça" },
+
     ];
-    /*
-   let usuario1 = await UsersModel.save("caio" , "43-998181781", "senha123", "admin");
-   let usuario2 = await UsersModel.save("ingrid" , "43-998181721", "senha321", "padrao");
-   let usuario3 = await UsersModel.save("maria" , "43-998181221", "senha145", "padrao");
-   let usuario4 = await UsersModel.save("nathalia" , "43-998181331", "senha136", "padrao");
-   let usuario5 = await UsersModel.save("antonio" , "43-998181441", "senha246", "padrao");
-   let usuario6 = await UsersModel.save("luis" , "43-998181551", "senha222", "padrao");
-   let usuario7 = await UsersModel.save("jonas" , "43-998181661", "senha333", "padrao");
-   let usuario8 = await UsersModel.save("alberto" , "43-998181771", "senha111", "padrao");
-   let usuario9 = await UsersModel.save("pedro" , "43-998181881", "senha119", "padrao");
-   let usuario10 = await UsersModel.save("adriano" , "43-99818981", "senha888", "admin");
-
-   let prontuario1 = await ProntuarioModel.save("gripe", "2023-11-26", "dramin", "dor no corpo, dor de cabeça");
-   let prontuario2 = await ProntuarioModel.save("virose", "2023-10-26", "Tiorfan", "diarreia");
-   let prontuario3 = await ProntuarioModel.save("garganta inflamada", "2023-11-12", "ibuprofeno", "dor de garganta");
-   let prontuario4 = await ProntuarioModel.save("dengue", "2023-11-12", "dramin", "dor no corpo, dor de cabeça");
-   let prontuario5 = await ProntuarioModel.save("covid", "2023-11-15", "paxlovid", "dor no corpo, dor de cabeça");
-   let prontuario6 = await ProntuarioModel.save("malaria", "2023-11-18", "tafenoquina", "febre alta, calafrio");
-   let prontuario7 = await ProntuarioModel.save("febre amarela", "2023-11-20", "dramin", "dor no corpo, dor de cabeça");
-   let prontuario8 = await ProntuarioModel.save("h1n1", "2023-11-05", "dramin", "dor no corpo, dor de cabeça");
-*/
-
+   
    const usuariosPromises = usuariosData.map(data => UsersModel.save(data.nome, data.telefone, data.password, data.tipoUsuario));
    const prontuariosPromises = prontuariosData.map(data => ProntuarioModel.save(data.situacaoPaciente, data.dataRegistro, data.remedioPrescrito, data.sintomas));
    await Promise.all([...usuariosPromises, ...prontuariosPromises]);
@@ -123,11 +117,23 @@ const deleteUsuario = async (req, res) => {
 };
 
 const UpdateUsuario = async (req, res) => {
-    const verificaUsuarioCadastrado = await UsersModel.getByidName(req.body.nome, req.body.password);
-    const tipoUsuario = verificaUsuarioCadastrado.dataValues.tipUsuario;
-    //if(tipoUsuario === "admin"){
-     //   const updateUser = await usersModel.update()
-    //}
+
+    try {
+        const verificaUsuarioCadastrado = await UsersModel.getByidName(req.body.nome, req.body.password);
+        const tipoUsuario = verificaUsuarioCadastrado.dataValues.tipUsuario;
+        const nomeUser = verificaUsuarioCadastrado.dataValues.nome;
+        const telefoneUser = verificaUsuarioCadastrado.dataValues.telefone;
+    
+        if(tipoUsuario != 'admin' && nomeUser === res.body.nome && telefoneUser === res.body.telefone){
+           const updateUser = await usersModel.update(res.body.nome, res.body.telefone, res.body.tipUsuario)
+        }
+        else{
+            const updateUser = await usersModel.update(res.body.nome, res.body.telefone, res.body.tipUsuario)
+        }
+        res.status(200).json({mensagem: 'Dados atualizados com sucesso!', usuario: updateUser})
+    } catch (error) {
+        return res.status(500).json({ error: 'Erro interno do servidor' });
+    }
 }
 
 module.exports = { 
@@ -135,5 +141,6 @@ module.exports = {
     install,
     cadastroUsuario,
     cadastroAdmin,
-    deleteUsuario
+    deleteUsuario,
+    UpdateUsuario
 };

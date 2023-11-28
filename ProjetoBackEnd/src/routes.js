@@ -21,6 +21,6 @@ router.use(validador.verificaToken); // todas as rotas que eu passar depois daqu
 
 router.post('/cadastroAdmin', validador.verificaCadastroAdmin, controller.cadastroAdmin);
 
-router.delete('/deleteUsuario', validador.deleteUsuario, controller.deleteUsuario);
+router.delete('/deleteUsuario', validador.verificaDeleteUsuario, controller.deleteUsuario);
 
 module.exports = router;
