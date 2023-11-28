@@ -4,11 +4,16 @@ const  router = express.Router();
 const controller = require('./controller/AuthController');
 const validador = require('./middlewares/validador');
 
-const { verificarLogin } = require('./controller/AuthController')
+//const { verificarLogin } = require('./controller/AuthController')
 
 router.get('/install', controller.install);
 
-router.post('/login', validador.verificaBodyLogin, verificarLogin);
+router.post('/login', validador.verificaBodyLogin, controller.verificarLogin);
+
+router.post('/CadastroUsuario', validador.verificaCadastroUsuario, controller.cadastroUsuario);
+
+router.post('/CadastroAdmin', validador.verificaCadastroAdmin, controller.cadastroAdmin)
+
 
 router.use(validador.verificaToken); // todas as rotas que eu passar depois daqui vai verificar token. 
 

@@ -49,5 +49,29 @@ const verificaBodyLogin = (req, res, next) =>{
     next();
 }
 
+const verificaCadastroUsuario = (req, res, next) => {
+    const {body} = req;
+    if(!body.nome && !body.password && !body.telefone ){
+        return res.status(400).json({message: 'Necessario informar todos os dados para cadastro de usuarios'})
+     }
+     next();
+}
 
-module.exports = {validaTexto, validarCampoNumerico,verificaToken,verificaBodyLogin}
+
+const verificaCadastroAdmin = (req, res, next) => {
+    const {body} = req;
+    if(!body.nome && !body.password && !body.telefone && !body.tipUsuario){
+        return res.status(400).json({message: 'Necessario todos os dados para cadastro de novos administradores'})
+     }
+     next();
+}
+
+
+module.exports = {
+    validaTexto, 
+    validarCampoNumerico,
+    verificaToken,
+    verificaBodyLogin,
+    verificaCadastroUsuario,
+    verificaCadastroAdmin
+}

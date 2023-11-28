@@ -1,6 +1,6 @@
-const {DataTypes, Op} = require("sequelize")
+const {DataTypes} = require("sequelize")
 const sequelize = require("./connection")
-const { json } = require("body-parser")
+
 
 const Usuarios = sequelize.define('Usuarios',
     {
@@ -29,8 +29,14 @@ const Usuarios = sequelize.define('Usuarios',
 )
 module.exports = {
     list: async function() {
-        const usuario = await Usuarios.findAll()
-        return usuario;
+        try {
+            const usuario = await Usuarios.findAll()
+            return usuario;
+        } catch (error) {
+            console.error("Erro ao buscar usuário", error);
+            throw error;
+        }
+      
     },
 
     save: async function (nome, telefone, password, tipUsuario) {
@@ -51,7 +57,13 @@ module.exports = {
     },
 
     update : async function(nome, codigo){
-        return await Usuarios.update()
+        try {
+            return await Usuarios.update()
+
+        } catch (error) {
+            console.error("Erro ao dados do cliente.", error);
+            throw error;
+        }
     },
     
     getByidName: async function(nome, password) {

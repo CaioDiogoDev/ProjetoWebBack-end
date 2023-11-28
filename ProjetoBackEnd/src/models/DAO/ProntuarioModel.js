@@ -40,10 +40,21 @@ module.exports = {
         }
     },
     list: async function() {
-        const prontuario = await Prontuario.findAll()
-        return prontuario;
+        try {
+            const prontuario = await Prontuario.findAll()
+            return prontuario;
+        } catch (error) {
+            console.error("Erro ao buscar prontuario", error);
+            throw error;
+        }
+       
     },
     update : async function(nome, codigo){
-        return await Prontuario.update()
+        try {
+            return await Prontuario.update()
+        } catch (error) {
+            console.error("Erro ao atualizar prontuario", error);
+            throw error;     
+        }
     }
 };
