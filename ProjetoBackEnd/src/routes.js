@@ -12,10 +12,11 @@ router.post('/login', validador.verificaBodyLogin, controller.verificarLogin);
 
 router.post('/CadastroUsuario', validador.verificaCadastroUsuario, controller.cadastroUsuario);
 
-router.post('/CadastroAdmin', validador.verificaCadastroAdmin, controller.cadastroAdmin)
+
 
 
 router.use(validador.verificaToken); // todas as rotas que eu passar depois daqui vai verificar token. 
 
+router.post('/CadastroAdmin', validador.verificaCadastroAdmin, controller.cadastroAdmin);
 
 module.exports = router;

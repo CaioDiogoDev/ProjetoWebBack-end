@@ -77,20 +77,29 @@ const cadastroUsuario = async (req, res) => {
         const cadastroUser = await UsersModel.save(req.body.nome, req.body.password,req.body.telefone);
         return cadastroUser;
     } catch (error) {
-        console.error("Erro ao cadastrar usuario", error);
-        throw error;
+        res.status(500).json({ error: 'Erro interno do servidor' });
     }
     
 }
 const cadastroAdmin = async (req, res) => {
     try {
-        const cadastroAdmin = await UsersModel.save(req.body.nome, req.body.password,req.body.telefone);
-        return cadastroAdmin;
+        const token = req.header('Authorization');
+
+        if (!token) {
+            return res.status(401).json({ error: 'Cadastro não permitido - Token não fornecido' });
+        }
+
+        jwt.verify(token, process.env.SECRET, async (erro) => {
+            if (erro) {
+                return res.status(401).json({ error: 'Cadastro não permitido - Token inválido' });
+            }
+            const cadastroAdmin = await UsersModel.save(req.body.nome, req.body.password, req.body.telefone);
+            res.status(201).json({ mensagem: 'Cadastro do admin realizado com sucesso', usuario: cadastroAdmin });
+        });
     } catch (error) {
-        console.error("Erro ao cadastrar usuario", error);
-        throw error;
-    }  
-}
+        res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+};
 
 module.exports = { 
     verificarLogin,
