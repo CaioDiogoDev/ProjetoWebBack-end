@@ -23,4 +23,10 @@ router.post('/cadastroAdmin', validador.verificaCadastroAdmin, controller.cadast
 
 router.delete('/deleteUsuario', validador.verificaDeleteUsuario, controller.deleteUsuario);
 
+router.delete('/deleteProntuario', validador.verificaDeleteProntuario, controller.deleteProntuario);
+
+router.put('/atualizaProntuario', validador.verificaDeleteProntuario, controller.UpdateProntuario)
+
+
+
 module.exports = router;

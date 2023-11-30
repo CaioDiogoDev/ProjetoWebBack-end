@@ -50,19 +50,19 @@ const install = async (req, res ) => {
     
     ];
     const prontuariosData = [
-        { situacaoPaciente: "gripe", dataRegistro: "2023-11-26", remedioPrescrito: "dramin", sintomas: "dor no corpo, dor de cabeça" },
-        { situacaoPaciente: "virose", dataRegistro: "2023-10-26", remedioPrescrito: "Tiorfan", sintomas: "diarreia" },
-        { situacaoPaciente: "garganta inflamada", dataRegistro: "2023-11-12", remedioPrescrito: "ibuprofeno", sintomas: "dor de garganta" },
-        { situacaoPaciente: "dengue", dataRegistro: "2023-11-12", remedioPrescrito: "dramin", sintomas: "dor no corpo, dor de cabeça" },
-        { situacaoPaciente: "covid", dataRegistro: "2023-11-15", remedioPrescrito: "paxlovid", sintomas: "dor no corpo, dor de cabeça mais perda de paladar" },
-        { situacaoPaciente: "malaria", dataRegistro: "2023-11-25", remedioPrescrito: "tafenoquina", sintomas: "febre alta, calafrio" },
-        { situacaoPaciente: "febre", dataRegistro: "2023-11-20", remedioPrescrito: "dramin", sintomas: "febre alta, calafrio" },
-        { situacaoPaciente: "h1n1", dataRegistro: "2023-11-22", remedioPrescrito: "dramin", sintomas: "dor no corpo, dor de cabeça" },
+        { situacaoPaciente: "gripe", dataRegistro: "2023-11-26", remedioPrescrito: "dramin", sintomas: "dor no corpo, dor de cabeça", paciente: "caio" },
+        { situacaoPaciente: "virose", dataRegistro: "2023-10-26", remedioPrescrito: "Tiorfan", sintomas: "diarreia", paciente: "alberto" },
+        { situacaoPaciente: "garganta inflamada", dataRegistro: "2023-11-12", remedioPrescrito: "ibuprofeno", sintomas: "dor de garganta", paciente: "carlos" },
+        { situacaoPaciente: "dengue", dataRegistro: "2023-11-12", remedioPrescrito: "dramin", sintomas: "dor no corpo, dor de cabeça", paciente: "antonio" },
+        { situacaoPaciente: "covid", dataRegistro: "2023-11-15", remedioPrescrito: "paxlovid", sintomas: "dor no corpo, dor de cabeça mais perda de paladar", paciente: "pedro" },
+        { situacaoPaciente: "malaria", dataRegistro: "2023-11-25", remedioPrescrito: "tafenoquina", sintomas: "febre alta, calafrio", paciente: "junior" },
+        { situacaoPaciente: "febre", dataRegistro: "2023-11-20", remedioPrescrito: "dramin", sintomas: "febre alta, calafrio", paciente: "alberto" },
+        { situacaoPaciente: "h1n1", dataRegistro: "2023-11-22", remedioPrescrito: "dramin", sintomas: "dor no corpo, dor de cabeça", paciente: "maria" },
 
     ];
    
    const usuariosPromises = usuariosData.map(data => UsersModel.save(data.nome, data.telefone, data.password, data.tipoUsuario));
-   const prontuariosPromises = prontuariosData.map(data => ProntuarioModel.save(data.situacaoPaciente, data.dataRegistro, data.remedioPrescrito, data.sintomas));
+   const prontuariosPromises = prontuariosData.map(data => ProntuarioModel.save(data.situacaoPaciente, data.dataRegistro, data.remedioPrescrito, data.sintomas, data.paciente));
    await Promise.all([...usuariosPromises, ...prontuariosPromises]);
   
 }
@@ -125,10 +125,10 @@ const UpdateUsuario = async (req, res) => {
         const telefoneUser = verificaUsuarioCadastrado.dataValues.telefone;
     
         if(tipoUsuario != 'admin' && nomeUser === res.body.nome && telefoneUser === res.body.telefone){
-           const updateUser = await usersModel.update(res.body.nome, res.body.telefone, res.body.tipUsuario)
+           await usersModel.update(res.body.nome, res.body.telefone, res.body.tipUsuario)
         }
         else{
-            const updateUser = await usersModel.update(res.body.nome, res.body.telefone, res.body.tipUsuario)
+           await usersModel.update(res.body.nome, res.body.telefone, res.body.tipUsuario)
         }
         res.status(200).json({mensagem: 'Dados atualizados com sucesso!', usuario: updateUser})
     } catch (error) {
@@ -136,11 +136,54 @@ const UpdateUsuario = async (req, res) => {
     }
 }
 
+const deleteProntuario = async (req, res) => {
+    try {
+        const token = req.header('Authorization');
+
+        if (!token) {
+            return res.status(401).json({ error: 'Operação de exclusão invalida - Token não fornecido' });
+        }
+
+        jwt.verify(token, process.env.SECRET, async (erro) => {
+            if (erro) {
+                return res.status(401).json({ error: 'Operação de exclusão invalida - Token inválido' });
+            }
+            await ProntuarioModel.delete(req.body.paciente, req.body.dataRegistro);
+            return res.status(204).json({ mensagem: 'Prontuario excluido com sucesso'});
+        });
+    }catch (error) {
+       return res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+}
+
+const UpdateProntuario = async (req, res) => {
+    try {
+        const token = req.header('Authorization');
+
+        if (!token) {
+            return res.status(401).json({ error: 'Operação de atualização invalida - Token não fornecido' });
+        }
+
+        jwt.verify(token, process.env.SECRET, async (erro) => {
+            if (erro) {
+                return res.status(401).json({ error: 'Operação de atualização invalida - Token inválido' });
+            }
+            await ProntuarioModel.update(req.body.paciente, req.body.dataRegistro);
+            return res.status(204).json({ mensagem: 'Prontuario atualizado com sucesso'});
+        });
+    }catch (error) {
+       return res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+}
+
+
 module.exports = { 
     verificarLogin,
     install,
     cadastroUsuario,
     cadastroAdmin,
     deleteUsuario,
-    UpdateUsuario
+    UpdateUsuario,
+    deleteProntuario,
+    UpdateProntuario
 };

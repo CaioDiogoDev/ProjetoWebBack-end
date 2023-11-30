@@ -10,7 +10,8 @@ const Prontuario = sequelize.define('Pronturario',{
      },
     dataRegistro: {
         type: DataTypes.DATE,
-        allowNull:false
+        allowNull:false,
+        primaryKey: true
     },
     remedioPrescrito: {
         type: DataTypes.STRING,
@@ -19,22 +20,27 @@ const Prontuario = sequelize.define('Pronturario',{
     sintomas:{
         type: DataTypes.STRING,
         allowNull: true
+    },
+    paciente: {
+        type: DataTypes.STRING,
+        allowNull: true
     }
 })
 
 module.exports = {
-    save: async function(situacaoPaciente,  dataRegistro, remedioPrescrito, sintomas){
+    save: async function(situacaoPaciente,  dataRegistro, remedioPrescrito, sintomas, paciente){
         try{
             const novoProntuario = await Prontuario.create({
                 situacaoPaciente,
                 dataRegistro,
                 remedioPrescrito,
-                sintomas
+                sintomas,
+                paciente
             });
             console.log('Novo prontuario salvo com sucesso');
             return novoProntuario;
         }
-        catch{
+        catch(error){
             console.log('Não foi possivel salvar o prontuario', error.message);
             throw error;
         }
@@ -49,12 +55,25 @@ module.exports = {
         }
        
     },
-    update : async function(nome, codigo){
+    update : async function(paciente, dataRegistro){
         try {
             return await Prontuario.update()
         } catch (error) {
             console.error("Erro ao atualizar prontuario", error);
             throw error;     
+        }
+    },
+    delete : async function(paciente,dataRegistro){
+        try {
+            const ExcluProntuario = await Prontuario.findOne({
+                where: {
+                    paciente: paciente,
+                    dataRegistro: dataRegistro
+                }
+             })
+            return ExcluProntuario.destroy()
+        } catch (error) {
+            console.error("Erro ao excluir prontuario", error);
         }
     }
 };

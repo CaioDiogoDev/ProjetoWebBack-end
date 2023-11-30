@@ -82,6 +82,14 @@ const verificaUpdateUsuario = (req, res, next) => {
      next();
 }
 
+const verificaDeleteProntuario = (req, res, next) => {
+    const {body} = req;
+    if(!body.paciente && !body.dataregistro){
+        return res.status(400).json({message: 'Necessario informar esses dados para remover prontuario.'})
+     }
+     next();
+    
+}
 
 module.exports = {
     validaTexto, 
@@ -91,6 +99,7 @@ module.exports = {
     verificaCadastroUsuario,
     verificaCadastroAdmin,
     verificaDeleteUsuario,
-    verificaUpdateUsuario
-
+    verificaUpdateUsuario,
+    verificaDeleteProntuario
+    
 }
