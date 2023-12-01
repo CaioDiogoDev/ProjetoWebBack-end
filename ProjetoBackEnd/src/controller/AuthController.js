@@ -69,7 +69,7 @@ const install = async (req, res ) => {
 
 const cadastroUsuario = async (req, res) => {
     try {
-        const cadastroUser = await UsersModel.save(req.body.nome, req.body.password,req.body.telefone);
+        const cadastroUser = await UsersModel.save(req.body.nome, req.body.password,req.body.telefone,"user");
         return  res.status(201).json({ mensagem: 'Cadastro do usuario realizado com sucesso', cadastroUser});
     } catch (error) {
        return res.status(500).json({ error: 'Erro interno do servidor' });

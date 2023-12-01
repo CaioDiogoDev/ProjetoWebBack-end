@@ -12,9 +12,7 @@ router.post('/login', validador.verificaBodyLogin, controller.verificarLogin);
 
 router.post('/cadastroUsuario', validador.verificaCadastroUsuario, controller.cadastroUsuario);
 
-
-
-router.put('/atualizaCadastro', validador.verificaCadastroUsuario, controller.cadastroUsuario);
+router.put('/atualizaCadastro', validador.verificaCadastroUsuario, controller.UpdateUsuario);
 
 
 router.use(validador.verificaToken); // todas as rotas que eu passar depois daqui vai verificar token. 
@@ -26,7 +24,6 @@ router.delete('/deleteUsuario', validador.verificaDeleteUsuario, controller.dele
 router.delete('/deleteProntuario', validador.verificaDeleteProntuario, controller.deleteProntuario);
 
 router.put('/atualizaProntuario', validador.verificaDeleteProntuario, controller.UpdateProntuario)
-
 
 
 module.exports = router;
