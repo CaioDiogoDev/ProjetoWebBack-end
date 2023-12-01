@@ -17,6 +17,8 @@ router.put('/atualizaCadastro', validador.verificaUpdateUsuario, controller.Upda
 
 router.use(validador.verificaToken); // todas as rotas que eu passar depois daqui vai verificar token. 
 
+router.put('/atualizaCadastroAdmin', validador.verificaUpdateUsuario, controller.UpdateUsuario);
+
 router.post('/cadastroAdmin', validador.verificaCadastroAdmin, controller.cadastroAdmin);
 
 router.delete('/deleteUsuario', validador.verificaDeleteUsuario, controller.deleteUsuario);

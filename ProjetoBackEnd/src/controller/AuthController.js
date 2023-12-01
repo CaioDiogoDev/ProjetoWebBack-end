@@ -121,10 +121,10 @@ const UpdateUsuario = async (req, res) => {
         const verificaUsuarioCadastrado = await UsersModel.getByidName(req.body.nome, req.body.password);
         const tipoUsuario = verificaUsuarioCadastrado.dataValues.tipUsuario;
         const { nome, password, telefone, codigo } = req.body;
-
+        
         if(tipoUsuario != 'admin'){
             console.log('entrei no if')
-           await usersModel.update(nome, password, telefone,codigo)
+           await usersModel.update(nome, telefone, password, codigo)
         }
         else{
            await usersModel.update(nome, password, telefone,codigo)
@@ -132,7 +132,7 @@ const UpdateUsuario = async (req, res) => {
         res.status(200).json({mensagem: 'Dados atualizados com sucesso!'})
     } catch (error) {
         console.log('erro:', error)
-        return res.status(500).json({ error: 'Falha ao tentar realizar atualização do cadastro' });
+        return res.status(500).json({ error: 'Falha ao tentar realizar atualização do cadastro'});
     }
 }
 
@@ -141,7 +141,7 @@ const deleteProntuario = async (req, res) => {
         const token = req.header('Authorization');
 
         if (!token) {
-            return res.status(401).json({ error: 'Operação de exclusão invalida - Token não fornecido' });
+            return res.status(401).json({ error: 'Operação de exclusão invalida - Token não fornecido'});
         }
 
         jwt.verify(token, process.env.SECRET, async (erro) => {
