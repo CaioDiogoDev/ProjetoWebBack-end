@@ -117,22 +117,22 @@ const deleteUsuario = async (req, res) => {
 };
 
 const UpdateUsuario = async (req, res) => {
-
     try {
         const verificaUsuarioCadastrado = await UsersModel.getByidName(req.body.nome, req.body.password);
         const tipoUsuario = verificaUsuarioCadastrado.dataValues.tipUsuario;
-        const nomeUser = verificaUsuarioCadastrado.dataValues.nome;
-        const telefoneUser = verificaUsuarioCadastrado.dataValues.telefone;
-    
-        if(tipoUsuario != 'admin' && nomeUser === res.body.nome && telefoneUser === res.body.telefone){
-           await usersModel.update(res.body.nome, res.body.telefone, res.body.tipUsuario)
+        const { nome, password, telefone, codigo } = req.body;
+
+        if(tipoUsuario != 'admin'){
+            console.log('entrei no if')
+           await usersModel.update(nome, password, telefone,codigo)
         }
         else{
-           await usersModel.update(res.body.nome, res.body.telefone, res.body.tipUsuario)
+           await usersModel.update(nome, password, telefone,codigo)
         }
-        res.status(200).json({mensagem: 'Dados atualizados com sucesso!', usuario: updateUser})
+        res.status(200).json({mensagem: 'Dados atualizados com sucesso!'})
     } catch (error) {
-        return res.status(500).json({ error: 'Erro interno do servidor' });
+        console.log('erro:', error)
+        return res.status(500).json({ error: 'Falha ao tentar realizar atualização do cadastro' });
     }
 }
 

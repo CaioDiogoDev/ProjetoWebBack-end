@@ -12,7 +12,7 @@ router.post('/login', validador.verificaBodyLogin, controller.verificarLogin);
 
 router.post('/cadastroUsuario', validador.verificaCadastroUsuario, controller.cadastroUsuario);
 
-router.put('/atualizaCadastro', validador.verificaCadastroUsuario, controller.UpdateUsuario);
+router.put('/atualizaCadastro', validador.verificaUpdateUsuario, controller.UpdateUsuario);
 
 
 router.use(validador.verificaToken); // todas as rotas que eu passar depois daqui vai verificar token. 

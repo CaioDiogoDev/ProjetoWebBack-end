@@ -51,11 +51,10 @@ const verificaBodyLogin = (req, res, next) =>{
 const verificaCadastroUsuario = (req, res, next) => {
     const {body} = req;
     if(!body.nome && !body.password && !body.telefone ){
-        return res.status(400).json({message: 'Necessario informar todos os dados para cadastro de usuarios'})
+        return res.status(400).json({message: 'Necessario informar nome, senha, telefone.'})
      }
      next();
 }
-
 
 const verificaCadastroAdmin = (req, res, next) => {
     const {body} = req;
@@ -75,7 +74,7 @@ const verificaDeleteUsuario = (req, res, next) => {
 
 const verificaUpdateUsuario = (req, res, next) => {
     const {body} = req;
-    if(!body.nome && !body.telefone && !body.tipUsuario){
+    if(!body.nome && !body.telefone && !body.tipUsuario, !body.codigo){
         return res.status(400).json({message: 'Necessario informar esses dados para atualiazar dados.'})
      }
      next();
