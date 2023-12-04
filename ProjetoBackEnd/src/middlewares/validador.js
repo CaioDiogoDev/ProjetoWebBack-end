@@ -74,7 +74,7 @@ const verificaDeleteUsuario = (req, res, next) => {
 }
 
 const verificaUpdateUsuario = (req, res, next) => {
-    console.log('estou qui no verificaUpdate')
+    console
     const { body } = req;
     if (!body.nome && !body.telefone && !body.password, !body.codigo) {
         return res.status(400).json({ message: 'Necessario informar nome, password, telefone e codigo para atualiazar dados.' })

@@ -99,17 +99,15 @@ const deleteUsuario = async (req, res) => {
 const UpdateUsuario = async (req, res) => {
     try {
 
-        const verificaUsuarioCadastrado = await UsersModel.getByidName(req.body.nome, req.body.password);
+        const verificaUsuarioCadastrado = await UsersModel.getByid(req.body.codigo);
         const { nome, password, telefone, codigo } = req.body;
 
-        const result = await usersModel.update(nome, telefone, password, codigo)
-        const linhasAfetas = result[0];
-        console.log(linhasAfetas)
-        if (linhasAfetas > 0) {
+        if (verificaUsuarioCadastrado != null) {
+            await usersModel.update(nome, telefone, password, codigo)
             return res.status(200).json({ mensagem: 'Dados atualizados com sucesso!' })
         }
-        else{
-            return res.status(204).json({ mensagem: 'Nenhum dado atualizado' })
+        else {
+            return res.status(404).json({ mensagem: 'Nenhum dado atualizado' })
         }
     } catch (error) {
         return res.status(500).json({ error: 'Falha ao tentar realizar atualização do cadastro' });

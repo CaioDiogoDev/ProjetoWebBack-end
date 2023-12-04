@@ -90,6 +90,19 @@ module.exports = {
             throw error;
         }
     },
+    getByid: async function (codigo) {
+        try {
+            return await Usuarios.findOne({
+                where: {
+                   codigo: codigo
+                }
+            });
+        } catch (error) {
+
+            console.error("Erro ao buscar usuário por  código:", error);
+            throw error;
+        }
+    },
     delete: async function (nome, telefone, id) {
         const user = await Usuarios.findOne({
             where: {
