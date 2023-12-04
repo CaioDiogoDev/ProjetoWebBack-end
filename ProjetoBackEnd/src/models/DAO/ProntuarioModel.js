@@ -70,10 +70,16 @@ module.exports = {
                     paciente: paciente,
                     dataRegistro: dataRegistro
                 }
-            })
-            return ExcluProntuario.destroy()
-        } catch (error) {
+            });
+
+            if (!ExcluProntuario) {
+                console.log('Prontuário não encontrado');
+            }
+
+            return ExcluProntuario.destroy();
+        }
+        catch (error) {
             console.error("Erro ao excluir prontuario", error);
         }
     }
-};
+}

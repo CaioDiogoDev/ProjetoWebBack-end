@@ -117,10 +117,10 @@ const deleteProntuario = async (req, res) => {
     try {
 
         await ProntuarioModel.delete(req.body.paciente, req.body.dataRegistro);
-        return res.status(204).json({ mensagem: 'Prontuario excluido com sucesso' });
+        return res.status(200).json({ mensagem: 'Prontuario excluido com sucesso' });
 
     } catch (error) {
-        return res.status(500).json({ error: 'Erro interno do servidor' });
+        return res.status(500).json({ error: 'Falha ao tentar excluir prontuario' });
     }
 }
 
@@ -131,7 +131,7 @@ const UpdateProntuario = async (req, res) => {
         return res.status(204).json({ mensagem: 'Prontuario atualizado com sucesso' });
 
     } catch (error) {
-        return res.status(500).json({ error: 'Erro interno do servidor' });
+        return res.status(500).json({ error: 'Falha ao tentar atualizar prontuario' });
     }
 }
 
