@@ -5,49 +5,48 @@ const bd = require('../models/DAO/connection')
 const jwt = require('jsonwebtoken');
 const usersModel = require('../models/DAO/usersModel');
 
-function createToken(id, userName){
-    return jwt.sign({id, userName}, process.env.SECRET, {expiresIn: '1h'});
+function createToken(id, userName) {
+    return jwt.sign({ id, userName }, process.env.SECRET, { expiresIn: '1h' });
 }
 
 const verificarLogin = async (req, res) => {
     try {
         const verificaUsuarioCadastrado = await UsersModel.getByidName(req.body.nome, req.body.password);
-         
+
         if (verificaUsuarioCadastrado) {
             const tipoUsuario = verificaUsuarioCadastrado.dataValues.tipUsuario;
             const { codigo, nome } = verificaUsuarioCadastrado.dataValues;
-        
+
             if (tipoUsuario === 'admin') {
                 const token = createToken(codigo, nome);
                 return res.status(200).json({ ...verificaUsuarioCadastrado.dataValues, token });
             } else {
-               return res.status(200).json(verificaUsuarioCadastrado.dataValues);
+                return res.status(200).json(verificaUsuarioCadastrado.dataValues);
             }
         } else {
-           return res.status(401).json({ error: 'Acesso não permitido' });
-        }        
+            return res.status(401).json({ error: 'Acesso não permitido' });
+        }
     } catch (error) {
-        console.error(error);
-       return res.status(500).json({ error: 'Erro interno do servidor' });
+        return res.status(500).json({ error: 'Erro interno do servidor' });
     }
 };
 
 
 
-const install = async (req, res ) => {
-   await bd.sync({force: true});
+const install = async (req, res) => {
+    await bd.sync({ force: true });
 
-   const usuariosData = [
-    { nome: "caio", telefone: "43-998181781", password: "senha123", tipoUsuario: "admin" },
-    { nome: "ingrid", telefone: "43-998181781", password: "senha1234", tipoUsuario: "user" },
-    { nome: "maria", telefone: "43-998181221", password: "senha122", tipoUsuario: "user" },
-    { nome: "nathalia", telefone: "43-998181441", password: "senha13", tipoUsuario: "user" },
-    { nome: "antonio", telefone: "43-998181681", password: "senha153", tipoUsuario: "user" },
-    { nome: "luis", telefone: "43-998181661", password: "senha183", tipoUsuario: "user" },
-    { nome: "alberto", telefone: "43-998151781", password: "senha193", tipoUsuario: "user" },
-    { nome: "adriano", telefone: "43-998781781", password: "senha119", tipoUsuario: "admin" },
+    const usuariosData = [
+        { nome: "caio", telefone: "43-998181781", password: "senha123", tipoUsuario: "admin" },
+        { nome: "ingrid", telefone: "43-998181781", password: "senha1234", tipoUsuario: "user" },
+        { nome: "maria", telefone: "43-998181221", password: "senha122", tipoUsuario: "user" },
+        { nome: "nathalia", telefone: "43-998181441", password: "senha13", tipoUsuario: "user" },
+        { nome: "antonio", telefone: "43-998181681", password: "senha153", tipoUsuario: "user" },
+        { nome: "luis", telefone: "43-998181661", password: "senha183", tipoUsuario: "user" },
+        { nome: "alberto", telefone: "43-998151781", password: "senha193", tipoUsuario: "user" },
+        { nome: "adriano", telefone: "43-998781781", password: "senha119", tipoUsuario: "admin" },
 
-    
+
     ];
     const prontuariosData = [
         { situacaoPaciente: "gripe", dataRegistro: "2023-11-26", remedioPrescrito: "dramin", sintomas: "dor no corpo, dor de cabeça", paciente: "caio" },
@@ -60,124 +59,87 @@ const install = async (req, res ) => {
         { situacaoPaciente: "h1n1", dataRegistro: "2023-11-22", remedioPrescrito: "dramin", sintomas: "dor no corpo, dor de cabeça", paciente: "maria" },
 
     ];
-   
-   const usuariosPromises = usuariosData.map(data => UsersModel.save(data.nome, data.telefone, data.password, data.tipoUsuario));
-   const prontuariosPromises = prontuariosData.map(data => ProntuarioModel.save(data.situacaoPaciente, data.dataRegistro, data.remedioPrescrito, data.sintomas, data.paciente));
-   await Promise.all([...usuariosPromises, ...prontuariosPromises]);
-  
+
+    const usuariosPromises = usuariosData.map(data => UsersModel.save(data.nome, data.telefone, data.password, data.tipoUsuario));
+    const prontuariosPromises = prontuariosData.map(data => ProntuarioModel.save(data.situacaoPaciente, data.dataRegistro, data.remedioPrescrito, data.sintomas, data.paciente));
+    await Promise.all([...usuariosPromises, ...prontuariosPromises]);
+
 }
 
 const cadastroUsuario = async (req, res) => {
     try {
-        const cadastroUser = await UsersModel.save(req.body.nome, req.body.password,req.body.telefone,"user");
-        return  res.status(201).json({ mensagem: 'Cadastro do usuario realizado com sucesso', cadastroUser});
+        const cadastroUser = await UsersModel.save(req.body.nome, req.body.password, req.body.telefone, "user");
+        return res.status(201).json({ mensagem: 'Cadastro do usuario realizado com sucesso', cadastroUser });
     } catch (error) {
-       return res.status(500).json({ error: 'Erro interno do servidor' });
+        return res.status(500).json({ error: 'Erro interno do servidor' });
     }
-    
+
 }
 const cadastroAdmin = async (req, res) => {
     try {
-        const token = req.header('Authorization');
+        const cadastroAdmin = await UsersModel.save(req.body.nome, req.body.password, req.body.telefone, "admin");
+        return res.status(201).json({ mensagem: 'Cadastro do admin realizado com sucesso', usuario: cadastroAdmin });
 
-        if (!token) {
-            return res.status(401).json({ error: 'Cadastro não permitido - Token não fornecido' });
-        }
-
-        jwt.verify(token, process.env.SECRET, async (erro) => {
-            if (erro) {
-                return res.status(401).json({ error: 'Cadastro não permitido - Token inválido' });
-            }
-            const cadastroAdmin = await UsersModel.save(req.body.nome, req.body.password, req.body.telefone);
-            return res.status(201).json({ mensagem: 'Cadastro do admin realizado com sucesso', usuario: cadastroAdmin });
-        });
-    }catch (error) {
-       return res.status(500).json({ error: 'Erro interno do servidor' });
+    } catch (error) {
+        return res.status(500).json({ error: 'Erro interno do servidor' });
     }
 };
 
 const deleteUsuario = async (req, res) => {
     try {
-        const token = req.header('Authorization');
 
-        if (!token) {
-            return res.status(401).json({ error: 'Operação de exclusão invalida - Token não fornecido' });
-        }
+        const cadastroAdmin = await UsersModel.delete(req.body.nome, req.body.telefone, req.body.id);
+        return res.status(204).json({ mensagem: 'Usuario excluido com sucesso', usuario: cadastroAdmin });
 
-        jwt.verify(token, process.env.SECRET, async (erro) => {
-            if (erro) {
-                return res.status(401).json({ error: 'Operação de exclusão invalida - Token inválido' });
-            }
-            const cadastroAdmin = await UsersModel.delete(req.body.nome, req.body.telefone,  req.body.id);
-            return res.status(204).json({ mensagem: 'Usuario excluido com sucesso', usuario: cadastroAdmin });
-        });
-    }catch (error) {
-       return res.status(500).json({ error: 'Erro interno do servidor' });
+    } catch (error) {
+        return res.status(500).json({ error: 'Erro interno do servidor' });
     }
 };
 
 const UpdateUsuario = async (req, res) => {
     try {
+
         const verificaUsuarioCadastrado = await UsersModel.getByidName(req.body.nome, req.body.password);
-        const tipoUsuario = verificaUsuarioCadastrado.dataValues.tipUsuario;
         const { nome, password, telefone, codigo } = req.body;
-        
-        if(tipoUsuario != 'admin'){
-            console.log('entrei no if')
-           await usersModel.update(nome, telefone, password, codigo)
+
+        const result = await usersModel.update(nome, telefone, password, codigo)
+        const linhasAfetas = result[0];
+        console.log(linhasAfetas)
+        if (linhasAfetas > 0) {
+            return res.status(200).json({ mensagem: 'Dados atualizados com sucesso!' })
         }
         else{
-           await usersModel.update(nome, password, telefone,codigo)
+            return res.status(204).json({ mensagem: 'Nenhum dado atualizado' })
         }
-        res.status(200).json({mensagem: 'Dados atualizados com sucesso!'})
     } catch (error) {
-        console.log('erro:', error)
-        return res.status(500).json({ error: 'Falha ao tentar realizar atualização do cadastro'});
+        return res.status(500).json({ error: 'Falha ao tentar realizar atualização do cadastro' });
     }
 }
 
 const deleteProntuario = async (req, res) => {
     try {
-        const token = req.header('Authorization');
 
-        if (!token) {
-            return res.status(401).json({ error: 'Operação de exclusão invalida - Token não fornecido'});
-        }
+        await ProntuarioModel.delete(req.body.paciente, req.body.dataRegistro);
+        return res.status(204).json({ mensagem: 'Prontuario excluido com sucesso' });
 
-        jwt.verify(token, process.env.SECRET, async (erro) => {
-            if (erro) {
-                return res.status(401).json({ error: 'Operação de exclusão invalida - Token inválido' });
-            }
-            await ProntuarioModel.delete(req.body.paciente, req.body.dataRegistro);
-            return res.status(204).json({ mensagem: 'Prontuario excluido com sucesso'});
-        });
-    }catch (error) {
-       return res.status(500).json({ error: 'Erro interno do servidor' });
+    } catch (error) {
+        return res.status(500).json({ error: 'Erro interno do servidor' });
     }
 }
 
 const UpdateProntuario = async (req, res) => {
     try {
-        const token = req.header('Authorization');
 
-        if (!token) {
-            return res.status(401).json({ error: 'Operação de atualização invalida - Token não fornecido' });
-        }
+        await ProntuarioModel.update(req.body.paciente, req.body.dataRegistro);
+        return res.status(204).json({ mensagem: 'Prontuario atualizado com sucesso' });
 
-        jwt.verify(token, process.env.SECRET, async (erro) => {
-            if (erro) {
-                return res.status(401).json({ error: 'Operação de atualização invalida - Token inválido' });
-            }
-            await ProntuarioModel.update(req.body.paciente, req.body.dataRegistro);
-            return res.status(204).json({ mensagem: 'Prontuario atualizado com sucesso'});
-        });
-    }catch (error) {
-       return res.status(500).json({ error: 'Erro interno do servidor' });
+    } catch (error) {
+        return res.status(500).json({ error: 'Erro interno do servidor' });
     }
 }
 
 
-module.exports = { 
+module.exports = {
     verificarLogin,
     install,
     cadastroUsuario,

@@ -3,9 +3,9 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const app = express();
 
-app.use(bodyParser.json()); 
+app.use(bodyParser.json());
 
-function validaTexto(texto){
+function validaTexto(texto) {
     if (!texto || !texto.trim()) {
         console.log("A string está nula ou vazia.");
     } else {
@@ -21,76 +21,79 @@ function validarCampoNumerico(valor) {
     }
 }
 
-function verificaToken(req, res, next){
-    const token = req.headers['authorization'];
+function verificaToken(req, res, next) {
+    const token = req.header('Authorization');
+    const tokenComBearer = token;
 
-    if(!token){
-        return res.status(403).json({error: 'Token necessario'})
+    const tokenSemBearer = tokenComBearer.replace('Bearer ', '').trim();
+
+    if (!tokenSemBearer) {
+        return res.status(401).json({ error: 'Operação inválida - Token não fornecido' });
     }
-    jwt.verify(jwt, process.env.SECRET, (err, userInfo) => {
-        if (err) {
-            res.status(403).end();
-            return;
+
+    jwt.verify(tokenSemBearer, process.env.SECRET, (erro, decoded) => {
+        if (erro) {
+            console.error('Erro ao verificar token:', erro);
+            return res.status(401).json({ error: 'Operação inválida - Token inválido' });
         }
 
-        res.json(userInfo);
+        next();
     });
-
-
-    req.userId = decode.id
 }
 
-const verificaBodyLogin = (req, res, next) =>{
-    const  {body} = req;
-    if(!body.nome || !body.password){
-       return res.status(400).json({message: 'Necessario informar nome  e password'})
+const verificaBodyLogin = (req, res, next) => {
+    const { body } = req;
+    if (!body.nome || !body.password) {
+        return res.status(400).json({ message: 'Necessario informar nome  e password' })
     }
     next();
 }
 
 const verificaCadastroUsuario = (req, res, next) => {
-    const {body} = req;
-    if(!body.nome && !body.password && !body.telefone ){
-        return res.status(400).json({message: 'Necessario informar nome, senha, telefone.'})
-     }
-     next();
+    const { body } = req;
+    if (!body.nome && !body.password && !body.telefone) {
+        return res.status(400).json({ message: 'Necessario informar nome, senha, telefone.' })
+    }
+    next();
 }
 
 const verificaCadastroAdmin = (req, res, next) => {
-    const {body} = req;
-    if(!body.nome && !body.password && !body.telefone && !body.tipUsuario){
-        return res.status(400).json({message: 'Necessario todos os dados para cadastro de novos administradores'})
-     }
-     next();
+    const { body } = req;
+    if (!body.nome && !body.password && !body.telefone) {
+        return res.status(400).json({ message: 'Necessario todos os dados para cadastro de novos administradores' })
+    }
+    next();
 }
 
 const verificaDeleteUsuario = (req, res, next) => {
-    const {body} = req;
-    if(!body.nome && !body.password && !body.telefone){
-        return res.status(400).json({message: 'Necessario todos os dados para localizar usuario a ser excluido.'})
-     }
-     next();
+    const { body } = req;
+    if (!body.nome && !body.password && !body.telefone) {
+        return res.status(400).json({ message: 'Necessario todos os dados para localizar usuario a ser excluido.' })
+    }
+    next();
 }
 
 const verificaUpdateUsuario = (req, res, next) => {
-    const {body} = req;
-    if(!body.nome && !body.telefone && !body.tipUsuario, !body.codigo){
-        return res.status(400).json({message: 'Necessario informar esses dados para atualiazar dados.'})
-     }
-     next();
+    console.log('estou qui no verificaUpdate')
+    const { body } = req;
+    if (!body.nome && !body.telefone && !body.password, !body.codigo) {
+        return res.status(400).json({ message: 'Necessario informar nome, password, telefone e codigo para atualiazar dados.' })
+    }
+    next();
 }
 
 const verificaDeleteProntuario = (req, res, next) => {
-    const {body} = req;
-    if(!body.paciente && !body.dataregistro){
-        return res.status(400).json({message: 'Necessario informar esses dados para remover prontuario.'})
-     }
-     next();
-    
+    const { body } = req;
+    if (!body.paciente && !body.dataregistro) {
+        return res.status(400).json({ message: 'Necessario informar esses dados para remover prontuario.' })
+    }
+    next();
+
 }
 
+
 module.exports = {
-    validaTexto, 
+    validaTexto,
     validarCampoNumerico,
     verificaToken,
     verificaBodyLogin,
@@ -98,6 +101,6 @@ module.exports = {
     verificaCadastroAdmin,
     verificaDeleteUsuario,
     verificaUpdateUsuario,
-    verificaDeleteProntuario
-    
+    verificaDeleteProntuario,
+
 }
