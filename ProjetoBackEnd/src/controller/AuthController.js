@@ -87,12 +87,11 @@ const cadastroAdmin = async (req, res) => {
 
 const deleteUsuario = async (req, res) => {
     try {
-
-        const cadastroAdmin = await UsersModel.delete(req.body.nome, req.body.telefone, req.body.id);
-        return res.status(204).json({ mensagem: 'Usuario excluido com sucesso', usuario: cadastroAdmin });
+        const usuarioDeletado = await UsersModel.delete(req.body.nome, req.body.password, req.body.telefone, req.body.codigo);
+        return res.status(200).json({ mensagem: 'Usuario excluido com sucesso', usuario: usuarioDeletado});
 
     } catch (error) {
-        return res.status(500).json({ error: 'Erro interno do servidor' });
+        return res.status(500).json({ error: 'Falha do tentar excluir usuario' });
     }
 };
 

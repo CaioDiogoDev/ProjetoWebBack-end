@@ -67,8 +67,13 @@ const verificaCadastroAdmin = (req, res, next) => {
 
 const verificaDeleteUsuario = (req, res, next) => {
     const { body } = req;
-    if (!body.nome && !body.password && !body.telefone) {
-        return res.status(400).json({ message: 'Necessario todos os dados para localizar usuario a ser excluido.' })
+    const camposObrigatorios = ['nome', 'password', 'telefone', 'codigo'];
+    
+    const camposFaltando = camposObrigatorios.filter(campo => !body[campo]);
+
+    if (camposFaltando.length > 0) {
+        const mensagemErro = `Campos obrigatórios faltando: ${camposFaltando.join(', ')}`;
+        return res.status(400).json({ message: mensagemErro });
     }
     next();
 }
