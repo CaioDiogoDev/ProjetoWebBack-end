@@ -10,9 +10,8 @@ const Prontuario = sequelize.define('Pronturario', {
         primaryKey: true
     },
     dataRegistro: {
-        type: DataTypes.DATE,
+        type: DataTypes.STRING,
         allowNull: false,
-        // primaryKey: true
     },
     paciente: {
         type: DataTypes.STRING,
@@ -42,12 +41,11 @@ module.exports = {
                 sintomas,
                 paciente
             });
-            console.log('Novo prontuario salvo com sucesso');
+            
             return novoProntuario;
         }
         catch (error) {
-            console.log('Não foi possivel salvar o prontuario', error.message);
-            throw error;
+            return res.status(500).json({ error: 'Falha ao tentar realizar atualização do cadastro' });
         }
     },
     list: async function () {
@@ -55,8 +53,7 @@ module.exports = {
             const prontuario = await Prontuario.findAll()
             return prontuario;
         } catch (error) {
-            console.error("Erro ao buscar prontuario", error);
-            throw error;
+            return res.status(500).json({ error: 'Falha ao listar prontuarios' });
         }
 
     },
@@ -64,25 +61,23 @@ module.exports = {
         try {
             return await Prontuario.update()
         } catch (error) {
-            console.error("Erro ao atualizar prontuario", error);
-            throw error;
+            return res.status(500).json({ error: 'Falha ao atualizar prontuario' });
         }
     },
-    delete: async function (paciente, dataRegistro) {
+    delete: async function (codigo, paciente, dataRegistro) {
         try {
             const ExcluProntuario = await Prontuario.findOne({
                 where: {
+                    codigo: codigo,
                     paciente: paciente,
                     dataRegistro: dataRegistro
                 }
             });
 
-            console.logo('prontuario:', ExcluProntuario)
-
-            return ExcluProntuario.destroy();
+            return await ExcluProntuario.destroy();
         }
         catch (error) {
-            console.error("Erro ao excluir prontuario", error);
+            return res.status(500).json({ error: 'Falha ao deletar prontuario' });
         }
     }
 }

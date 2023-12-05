@@ -89,7 +89,7 @@ const verificaUpdateUsuario = (req, res, next) => {
 
 const verificaDeleteProntuario = (req, res, next) => {
     const { body } = req;
-    if (!body.paciente && !body.dataregistro) {
+    if (!body.codigo && !body.paciente && !body.dataregistro && !body.codigo) {
         return res.status(400).json({ message: 'Necessario informar esses dados para remover prontuario.' })
     }
     next();

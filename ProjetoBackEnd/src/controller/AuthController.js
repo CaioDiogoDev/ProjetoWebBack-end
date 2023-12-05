@@ -119,7 +119,7 @@ const UpdateUsuario = async (req, res) => {
 const deleteProntuario = async (req, res) => {
     try {
 
-        await ProntuarioModel.delete(req.body.paciente, req.body.dataRegistro);
+        await ProntuarioModel.delete( req.body.codigo ,req.body.paciente, req.body.dataRegistro);
         return res.status(200).json({ mensagem: 'Prontuario excluido com sucesso' });
 
     } catch (error) {
