@@ -5,22 +5,6 @@ const app = express();
 
 app.use(bodyParser.json());
 
-function validaTexto(texto) {
-    if (!texto || !texto.trim()) {
-        console.log("A string está nula ou vazia.");
-    } else {
-        console.log(`A string "${texto}" é válida.`);
-    }
-}
-
-function validarCampoNumerico(valor) {
-    if (!valor && valor !== 0) {
-        console.log("O campo numérico está vazio ou nulo.");
-    } else {
-        console.log(`O valor numérico é: ${valor}`);
-    }
-}
-
 function verificaToken(req, res, next) {
     const token = req.header('Authorization');
     const tokenComBearer = token;
@@ -111,8 +95,6 @@ const verificaUpdateProntuario = (req, res, next) => {
 
 
 module.exports = {
-    validaTexto,
-    validarCampoNumerico,
     verificaToken,
     verificaBodyLogin,
     verificaCadastroUsuario,

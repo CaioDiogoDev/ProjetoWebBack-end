@@ -17,7 +17,7 @@ const verificarLogin = async (req, res) => {
             const tipoUsuario = verificaUsuarioCadastrado.dataValues.tipUsuario;
             const { codigo, nome } = verificaUsuarioCadastrado.dataValues;
 
-            if (tipoUsuario === 'admin') {
+            if (tipoUsuario === 'medico') {
                 const token = createToken(codigo, nome);
                 return res.status(200).json({ ...verificaUsuarioCadastrado.dataValues, token });
             } else {
@@ -129,11 +129,12 @@ const deleteProntuario = async (req, res) => {
 
 const UpdateProntuario = async (req, res) => {
     try {
-        await ProntuarioModel.update(req.body.codigo, req.body.paciente, red.body.situacaoPaciente, req.body.remedioPrescrito, req.body.sintomas);
-        return res.status(204).json({ mensagem: 'Prontuario atualizado com sucesso' });
+      const result =  await ProntuarioModel.update(req.body.codigo, req.body.paciente, req.body.situacaoPaciente, req.body.remedioPrescrito, req.body.sintomas);
+      console.log(result)
+        return res.status(201).json({ mensagem: 'Prontuario atualizado com sucesso' });
 
     } catch (error) {
-        return res.status(500).json({ error: 'Falha ao tentar atualizar prontuario' });
+        return res.status(500).json({ error: 'AuthController - Falha ao tentar atualizar prontuario' });
     }
 }
 

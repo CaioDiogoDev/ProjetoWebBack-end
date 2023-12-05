@@ -33,7 +33,8 @@ module.exports = {
             const usuario = await Usuarios.findAll()
             return usuario;
         } catch (error) {
-            return res.status(500).json({ error: 'Falha ao tentar listar usuarios' });
+            console.error('Usuarios model - Falha ao listar usuarios:', error);
+            throw error; 
         }
 
     },
@@ -49,7 +50,8 @@ module.exports = {
             return novoUsuario;
 
         } catch (error) {
-            return res.status(500).json({ error: 'Falha ao salvar novo usuario' });
+            console.error('Usuarios model - Falha ao salvar usuarios:', error);
+            throw error; 
         }
     },
 
@@ -68,7 +70,8 @@ module.exports = {
             return [linhasAfetadas, linhasAtualizadas];
 
         } catch (error) {
-            return res.status(500).json({ error: 'Falha ao tentar realizar atualização do usuario' });
+            console.error('Usuarios model - Falha ao atualizar usuarios:', error);
+            throw error; 
         }
     },
 
@@ -81,8 +84,8 @@ module.exports = {
                 }
             });
         } catch (error) {
-
-            return res.status(500).json({ error: 'Falha ao buscar usuario por nome e password' });
+            console.error('Usuarios model - Falha ao buscar usuarios por nome e password :', error);
+            throw error;  
         }
     },
     getByid: async function (codigo) {
@@ -94,7 +97,8 @@ module.exports = {
             });
         } catch (error) {
 
-            return res.status(500).json({ error: 'Falha ao buscar usuario por codigo' });
+            console.error('Usuarios model - Falha ao buscar  usuarios por codigo:', error);
+            throw error; 
         }
     },
     delete: async function (nome, password, telefone, codigo) {
@@ -109,7 +113,8 @@ module.exports = {
             })
             return user.destroy()
         } catch (error) {
-            return res.status(500).json({ error: 'Falha ao deletar usuario' });
+            console.error('Usuarios model - Falha ao deletar usuarios:', error);
+            throw error; 
         }
     },
 

@@ -45,7 +45,8 @@ module.exports = {
             return novoProntuario;
         }
         catch (error) {
-            return res.status(500).json({ error: 'Falha ao tentar realizar atualização do cadastro' });
+            console.error('Prontuario model - Falha ao salvar prontuario:', error);
+            throw error; 
         }
     },
     list: async function () {
@@ -53,25 +54,31 @@ module.exports = {
             const prontuario = await Prontuario.findAll()
             return prontuario;
         } catch (error) {
-            return res.status(500).json({ error: 'Falha ao listar prontuarios' });
+            console.error('Prontuario model - Falha ao listar prontuario:', error);
+            throw error; 
         }
 
     },
     update: async function (codigo, paciente, situacaoPaciente, remedioPrescrito, sintomas) {
         try {
-            return await Prontuario.update({ situacaoPaciente, remedioPrescrito, sintomas }, {
-                where: {
-                    codigo: codigo,
-                    paciente: paciente
+            const result = await Prontuario.update(
+                { situacaoPaciente: situacaoPaciente, remedioPrescrito: remedioPrescrito, sintomas: sintomas },
+                {
+                    where: {
+                        codigo: codigo,
+                        paciente: paciente
+                    },
+                    returning: true
                 }
-            });
-
+            );
+            return result;
+        } catch (error) {
+           
+            console.error('Prontuario model - Falha ao atualizar prontuario:', error);
+            throw error; 
         }
-        catch (error) {
-            return res.status(500).json({ error: 'Falha ao atualizar prontuario' });
-        }
-
     },
+    
     delete: async function (codigo, paciente, dataRegistro) {
         try {
             const ExcluProntuario = await Prontuario.findOne({
@@ -85,7 +92,8 @@ module.exports = {
             return await ExcluProntuario.destroy();
         }
         catch (error) {
-            return res.status(500).json({ error: 'Falha ao deletar prontuario' });
+            console.error('Prontuario model - Falha ao deletar prontuario:', error);
+            throw error; 
         }
     }
 }
