@@ -41,7 +41,7 @@ module.exports = {
                 sintomas,
                 paciente
             });
-            
+
             return novoProntuario;
         }
         catch (error) {
@@ -57,12 +57,20 @@ module.exports = {
         }
 
     },
-    update: async function (paciente, dataRegistro) {
+    update: async function (codigo, paciente, situacaoPaciente, remedioPrescrito, sintomas) {
         try {
-            return await Prontuario.update()
-        } catch (error) {
+            return await Prontuario.update({ situacaoPaciente, remedioPrescrito, sintomas }, {
+                where: {
+                    codigo: codigo,
+                    paciente: paciente
+                }
+            });
+
+        }
+        catch (error) {
             return res.status(500).json({ error: 'Falha ao atualizar prontuario' });
         }
+
     },
     delete: async function (codigo, paciente, dataRegistro) {
         try {

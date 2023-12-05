@@ -33,8 +33,7 @@ module.exports = {
             const usuario = await Usuarios.findAll()
             return usuario;
         } catch (error) {
-            console.error("Erro ao buscar usuário", error);
-            throw error;
+            return res.status(500).json({ error: 'Falha ao tentar listar usuarios' });
         }
 
     },
@@ -47,16 +46,14 @@ module.exports = {
                 password,
                 tipUsuario
             });
-            console.log('Novo usuário salvo com sucesso');
             return novoUsuario;
 
         } catch (error) {
-            console.error('Não foi possível salvar o usuário', error.message);
-            throw error;
+            return res.status(500).json({ error: 'Falha ao salvar novo usuario' });
         }
     },
 
-    update: async function (nome, telefone,  password, codigo) {
+    update: async function (nome, telefone, password, codigo) {
         try {
             const [linhasAfetadas, linhasAtualizadas] = await Usuarios.update(
                 { nome: nome, telefone: telefone, password: password },
@@ -64,15 +61,14 @@ module.exports = {
                     where: {
                         codigo: codigo
                     },
-                    returning: true 
+                    returning: true
                 }
-                
+
             );
             return [linhasAfetadas, linhasAtualizadas];
 
         } catch (error) {
-            console.error("Erro ao atualizar dados do cliente.", error);
-            throw error;
+            return res.status(500).json({ error: 'Falha ao tentar realizar atualização do usuario' });
         }
     },
 
@@ -86,33 +82,35 @@ module.exports = {
             });
         } catch (error) {
 
-            console.error("Erro ao buscar usuário por nome e código:", error);
-            throw error;
+            return res.status(500).json({ error: 'Falha ao buscar usuario por nome e password' });
         }
     },
     getByid: async function (codigo) {
         try {
             return await Usuarios.findOne({
                 where: {
-                   codigo: codigo
+                    codigo: codigo
                 }
             });
         } catch (error) {
 
-            console.error("Erro ao buscar usuário por  código:", error);
-            throw error;
+            return res.status(500).json({ error: 'Falha ao buscar usuario por codigo' });
         }
-    }, 
-    delete: async function (nome, password, telefone, codigo ) {
-        const user = await Usuarios.findOne({
-            where: {
-                nome: nome,
-                password: password,
-                telefone: telefone,
-                codigo: codigo
-            }
-        })
-        return user.destroy()
+    },
+    delete: async function (nome, password, telefone, codigo) {
+        try {
+            const user = await Usuarios.findOne({
+                where: {
+                    nome: nome,
+                    password: password,
+                    telefone: telefone,
+                    codigo: codigo
+                }
+            })
+            return user.destroy()
+        } catch (error) {
+            return res.status(500).json({ error: 'Falha ao deletar usuario' });
+        }
     },
 
 }

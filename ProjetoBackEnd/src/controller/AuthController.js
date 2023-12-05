@@ -119,7 +119,7 @@ const UpdateUsuario = async (req, res) => {
 const deleteProntuario = async (req, res) => {
     try {
 
-        await ProntuarioModel.delete( req.body.codigo ,req.body.paciente, req.body.dataRegistro);
+        await ProntuarioModel.delete(req.body.codigo, req.body.paciente, req.body.dataRegistro);
         return res.status(200).json({ mensagem: 'Prontuario excluido com sucesso' });
 
     } catch (error) {
@@ -129,8 +129,7 @@ const deleteProntuario = async (req, res) => {
 
 const UpdateProntuario = async (req, res) => {
     try {
-
-        await ProntuarioModel.update(req.body.paciente, req.body.dataRegistro);
+        await ProntuarioModel.update(req.body.codigo, req.body.paciente, red.body.situacaoPaciente, req.body.remedioPrescrito, req.body.sintomas);
         return res.status(204).json({ mensagem: 'Prontuario atualizado com sucesso' });
 
     } catch (error) {

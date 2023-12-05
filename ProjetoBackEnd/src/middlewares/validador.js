@@ -96,6 +96,19 @@ const verificaDeleteProntuario = (req, res, next) => {
 
 }
 
+const verificaUpdateProntuario = (req, res, next) => {
+    const { body } = req;
+    const camposObrigatorios = ['situacaoPaciente', 'remedioPrescrito', 'sintomas'];
+    
+    const camposFaltando = camposObrigatorios.filter(campo => !body[campo]);
+
+    if (camposFaltando.length > 0) {
+        const mensagemErro = `Campos obrigatórios faltando: ${camposFaltando.join(', ')}`;
+        return res.status(400).json({ message: mensagemErro });
+    }
+    next();
+}
+
 
 module.exports = {
     validaTexto,
@@ -107,5 +120,6 @@ module.exports = {
     verificaDeleteUsuario,
     verificaUpdateUsuario,
     verificaDeleteProntuario,
+    verificaUpdateProntuario
 
 }
