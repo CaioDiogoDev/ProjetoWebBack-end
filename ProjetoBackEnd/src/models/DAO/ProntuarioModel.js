@@ -4,24 +4,29 @@ const userModel = require('./usersModel')
 
 const Prontuario = sequelize.define('Pronturario', {
 
-    situacaoPaciente: {
-        type: DataTypes.STRING,
-        allowNull: true
+    codigo: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
     },
     dataRegistro: {
         type: DataTypes.DATE,
         allowNull: false,
-        primaryKey: true
+        // primaryKey: true
+    },
+    paciente: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    situacaoPaciente: {
+        type: DataTypes.STRING,
+        allowNull: true
     },
     remedioPrescrito: {
         type: DataTypes.STRING,
         allowNull: true
     },
     sintomas: {
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    paciente: {
         type: DataTypes.STRING,
         allowNull: true
     }
@@ -72,9 +77,7 @@ module.exports = {
                 }
             });
 
-            if (!ExcluProntuario) {
-                console.log('Prontuário não encontrado');
-            }
+            console.logo('prontuario:', ExcluProntuario)
 
             return ExcluProntuario.destroy();
         }

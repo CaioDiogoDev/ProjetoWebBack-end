@@ -34,61 +34,64 @@ const verificarLogin = async (req, res) => {
 
 
 const install = async (req, res) => {
-    await bd.sync({ force: true });
-
-    const usuariosData = [
-        { nome: "caio", telefone: "43-998181781", password: "senha123", tipoUsuario: "admin" },
-        { nome: "ingrid", telefone: "43-998181781", password: "senha1234", tipoUsuario: "user" },
-        { nome: "maria", telefone: "43-998181221", password: "senha122", tipoUsuario: "user" },
-        { nome: "nathalia", telefone: "43-998181441", password: "senha13", tipoUsuario: "user" },
-        { nome: "antonio", telefone: "43-998181681", password: "senha153", tipoUsuario: "user" },
-        { nome: "luis", telefone: "43-998181661", password: "senha183", tipoUsuario: "user" },
-        { nome: "alberto", telefone: "43-998151781", password: "senha193", tipoUsuario: "user" },
-        { nome: "adriano", telefone: "43-998781781", password: "senha119", tipoUsuario: "admin" },
-
-
-    ];
-    const prontuariosData = [
-        { situacaoPaciente: "gripe", dataRegistro: "2023-11-26", remedioPrescrito: "dramin", sintomas: "dor no corpo, dor de cabeça", paciente: "caio" },
-        { situacaoPaciente: "virose", dataRegistro: "2023-10-26", remedioPrescrito: "Tiorfan", sintomas: "diarreia", paciente: "alberto" },
-        { situacaoPaciente: "garganta inflamada", dataRegistro: "2023-11-12", remedioPrescrito: "ibuprofeno", sintomas: "dor de garganta", paciente: "carlos" },
-        { situacaoPaciente: "dengue", dataRegistro: "2023-11-12", remedioPrescrito: "dramin", sintomas: "dor no corpo, dor de cabeça", paciente: "antonio" },
-        { situacaoPaciente: "covid", dataRegistro: "2023-11-15", remedioPrescrito: "paxlovid", sintomas: "dor no corpo, dor de cabeça mais perda de paladar", paciente: "pedro" },
-        { situacaoPaciente: "malaria", dataRegistro: "2023-11-25", remedioPrescrito: "tafenoquina", sintomas: "febre alta, calafrio", paciente: "junior" },
-        { situacaoPaciente: "febre", dataRegistro: "2023-11-20", remedioPrescrito: "dramin", sintomas: "febre alta, calafrio", paciente: "alberto" },
-        { situacaoPaciente: "h1n1", dataRegistro: "2023-11-22", remedioPrescrito: "dramin", sintomas: "dor no corpo, dor de cabeça", paciente: "maria" },
-
-    ];
-
-    const usuariosPromises = usuariosData.map(data => UsersModel.save(data.nome, data.telefone, data.password, data.tipoUsuario));
-    const prontuariosPromises = prontuariosData.map(data => ProntuarioModel.save(data.situacaoPaciente, data.dataRegistro, data.remedioPrescrito, data.sintomas, data.paciente));
-    await Promise.all([...usuariosPromises, ...prontuariosPromises]);
-
-}
-
-const cadastroUsuario = async (req, res) => {
     try {
-        const cadastroUser = await UsersModel.save(req.body.nome, req.body.password, req.body.telefone, "user");
-        return res.status(201).json({ mensagem: 'Cadastro do usuario realizado com sucesso', cadastroUser });
+        await bd.sync({ force: true });
+
+        const usuariosData = [
+            { nome: "caio", telefone: "43-998181781", password: "senha123", tipoUsuario: "medico" },
+            { nome: "ingrid", telefone: "43-998181781", password: "senha1234", tipoUsuario: "enfermeira" },
+            { nome: "maria", telefone: "43-998181221", password: "senha122", tipoUsuario: "enfermeira" },
+            { nome: "luis", telefone: "43-998181661", password: "senha183", tipoUsuario: "medico" },
+            { nome: "isabele", telefone: "43-998781781", password: "senha119", tipoUsuario: "enfermeira" }
+        ]
+
+        const prontuariosData = [
+            { dataRegistro: "2023-11-26", paciente: "caio", situacaoPaciente: "gripe", remedioPrescrito: "dramin", sintomas: "dor no corpo, dor de cabeça" },
+            { dataRegistro: "2023-10-11", paciente: "alberto", situacaoPaciente: "virose", remedioPrescrito: "dramin", sintomas: "dor no corpo, dor de cabeça" },
+            { dataRegistro: "2023-09-26", paciente: "jonas", situacaoPaciente: "dor de garganta", remedioPrescrito: "ibuprofeno", sintomas: "dor no corpo, dor de cabeça" },
+            { dataRegistro: "2023-12-02", paciente: "maria", situacaoPaciente: "dengue", remedioPrescrito: "paracetamol", sintomas: "dor no corpo, dor de cabeça" },
+            { dataRegistro: "2023-11-13", paciente: "carol", situacaoPaciente: "covid", remedioPrescrito: "dramin", sintomas: "dor no corpo, dor de cabeça" },
+            { dataRegistro: "2023-12-03", paciente: "camila", situacaoPaciente: "febre alta", remedioPrescrito: "ibuprofeno", sintomas: "dor no corpo, dor de cabeça" },
+            { dataRegistro: "2023-09-23", paciente: "antonio", situacaoPaciente: "h1n1", remedioPrescrito: "paracetamol", sintomas: "dor no corpo, dor de cabeça" },
+            { dataRegistro: "2023-08-26", paciente: "pedro", situacaoPaciente: "gripe", remedioPrescrito: "dramin", sintomas: "dor no corpo, dor de cabeça" },
+            { dataRegistro: "2023-05-26", paciente: "manuel", situacaoPaciente: "diarreia", remedioPrescrito: "imosec", sintomas: "dor no corpo, dor de cabeça" },
+            { dataRegistro: "2023-07-26", paciente: "henrique", situacaoPaciente: "tontura", remedioPrescrito: "dramin", sintomas: "dor no corpo, dor de cabeça" },
+            { dataRegistro: "2023-10-26", paciente: "eduardo", situacaoPaciente: "covid", remedioPrescrito: "ibuprofeno", sintomas: "dor no corpo, dor de cabeça" }
+        ];
+
+        const usuariosPromises = usuariosData.map(data => UsersModel.save(data.nome, data.telefone, data.password, data.tipoUsuario));
+        const prontuariosPromises = prontuariosData.map(data => ProntuarioModel.save(data.situacaoPaciente, data.dataRegistro, data.remedioPrescrito, data.sintomas, data.paciente));
+        await Promise.all([...usuariosPromises, ...prontuariosPromises]);
+        return res.status(201).json({ mensagem: 'Instalação concluida com sucesso' });
     } catch (error) {
-        return res.status(500).json({ error: 'Erro interno do servidor' });
+        return res.status(500).json({ mensagem: 'Erro na instalação.' });
     }
 
 }
-const cadastroAdmin = async (req, res) => {
+
+const cadastroEnfermeira = async (req, res) => {
     try {
-        const cadastroAdmin = await UsersModel.save(req.body.nome, req.body.password, req.body.telefone, "admin");
+        const cadastroUser = await UsersModel.save(req.body.nome, req.body.password, req.body.telefone, "enfermeira");
+        return res.status(201).json({ mensagem: 'Cadastro do usuario realizado com sucesso', cadastroUser });
+    } catch (error) {
+        return res.status(500).json({ error: 'Erro no cadastro da enfermeira' });
+    }
+
+}
+const cadastroMedico = async (req, res) => {
+    try {
+        const cadastroAdmin = await UsersModel.save(req.body.nome, req.body.password, req.body.telefone, "medico");
         return res.status(201).json({ mensagem: 'Cadastro do admin realizado com sucesso', usuario: cadastroAdmin });
 
     } catch (error) {
-        return res.status(500).json({ error: 'Erro interno do servidor' });
+        return res.status(500).json({ error: 'Erro no cadastro do medico' });
     }
 };
 
 const deleteUsuario = async (req, res) => {
     try {
         const usuarioDeletado = await UsersModel.delete(req.body.nome, req.body.password, req.body.telefone, req.body.codigo);
-        return res.status(200).json({ mensagem: 'Usuario excluido com sucesso', usuario: usuarioDeletado});
+        return res.status(200).json({ mensagem: 'Usuario excluido com sucesso', usuario: usuarioDeletado });
 
     } catch (error) {
         return res.status(500).json({ error: 'Falha do tentar excluir usuario' });
@@ -139,8 +142,8 @@ const UpdateProntuario = async (req, res) => {
 module.exports = {
     verificarLogin,
     install,
-    cadastroUsuario,
-    cadastroAdmin,
+    cadastroEnfermeira,
+    cadastroMedico,
     deleteUsuario,
     UpdateUsuario,
     deleteProntuario,

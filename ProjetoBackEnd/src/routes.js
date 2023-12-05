@@ -10,7 +10,7 @@ router.get('/install', controller.install);
 
 router.post('/login', validador.verificaBodyLogin, controller.verificarLogin);
 
-router.post('/cadastroUsuario', validador.verificaCadastroUsuario, controller.cadastroUsuario);
+router.post('/cadastroUsuario', validador.verificaCadastroUsuario, controller.cadastroEnfermeira);
 
 router.put('/atualizaCadastro', validador.verificaUpdateUsuario, controller.UpdateUsuario);
 
@@ -18,7 +18,7 @@ router.use(validador.verificaToken);
 
 router.put('/atualizaCadastroAdmin', validador.verificaUpdateUsuario, controller.UpdateUsuario);
 
-router.post('/cadastroAdmin', validador.verificaCadastroAdmin, controller.cadastroAdmin);
+router.post('/cadastroAdmin', validador.verificaCadastroAdmin, controller.cadastroMedico);
 
 router.delete('/deleteUsuario', validador.verificaDeleteUsuario, controller.deleteUsuario);
 
