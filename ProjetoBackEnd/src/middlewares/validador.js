@@ -15,7 +15,7 @@ function verificaToken(req, res, next) {
         return res.status(401).json({ error: 'Operação inválida - Token não fornecido' });
     }
 
-    jwt.verify(tokenSemBearer, process.env.SECRET, (erro, decoded) => {
+    jwt.verify(tokenSemBearer, process.env.SECRET, (erro) => {
         if (erro) {
             console.error('Erro ao verificar token:', erro);
             return res.status(401).json({ error: 'Operação inválida - Token inválido' });
