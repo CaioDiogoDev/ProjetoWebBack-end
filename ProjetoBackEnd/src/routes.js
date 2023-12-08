@@ -1,4 +1,6 @@
 const express = require('express');
+const swaggerUi = require('swagger-ui-express');
+const swaggerFile = require('./swagger_output.json');
 const router = express.Router();
 
 const controller = require('./controller/AuthController');
@@ -14,7 +16,9 @@ router.post('/cadastroUsuario', validador.verificaCadastroUsuario, controller.ca
 
 router.put('/atualizaCadastro', validador.verificaUpdateUsuario, controller.UpdateUsuario);
 
-router.get('/ListarProntuario', validador.verificaEntradalistar, controller.ListaProntuario)
+router.get('/ListarProntuario', validador.verificaEntradalistar, controller.ListaProntuario);
+
+router.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 router.use(validador.verificaToken); 
 

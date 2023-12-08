@@ -67,3 +67,12 @@ via Moodle em um sistema de fila (O primeiro a agendar será o primeiro a aprese
 agendamento sem apresentação levará a um desconto da nota. Se porventura, o número de
 alunos solicitantes for maior do que a capacidade do professor de avaliar, os alunos não
 atendidos deverão apresentar na próxima aula.
+
+#Recomendaçoes para utilização do projeto!
+
+1. Criar um database com nome de "clinica".
+2. Comando para rodar projeto npm start.
+3. Rodar a rota /install para criar os dados. 
+4. Caso realize alguma alteração nas rotas necessario atualizar a documentação com o seguinte comando npm start  generate-swagger.
+
+
