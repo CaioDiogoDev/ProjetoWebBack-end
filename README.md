@@ -68,7 +68,8 @@ agendamento sem apresentação levará a um desconto da nota. Se porventura, o n
 alunos solicitantes for maior do que a capacidade do professor de avaliar, os alunos não
 atendidos deverão apresentar na próxima aula.
 
-#Recomendaçoes para utilização do projeto!
+
+Recomendaçoes para utilização do projeto!
 
 1. Criar um database com nome de "clinica".
 2. Comando para rodar projeto npm start.
