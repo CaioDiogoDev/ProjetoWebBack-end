@@ -7,13 +7,14 @@ app.use(bodyParser.json());
 
 function verificaToken(req, res, next) {
     const token = req.header('Authorization');
+    if (!token) {
+        return res.status(401).json({ error: 'Operação inválida - Token não fornecido' });
+    }
     const tokenComBearer = token;
 
     const tokenSemBearer = tokenComBearer.replace('Bearer ', '').trim();
-
-    if (!tokenSemBearer) {
-        return res.status(401).json({ error: 'Operação inválida - Token não fornecido' });
-    }
+    console.log(tokenSemBearer)
+    
 
     jwt.verify(tokenSemBearer, process.env.SECRET, (erro) => {
         if (erro) {
@@ -53,7 +54,7 @@ const verificaCadastroUsuario = (req, res, next) => {
 
 const verificaCadastroAdmin = (req, res, next) => {
     const { body } = req;
-    const camposObrigatorios = ['nome', 'password', 'telefone'];
+    const camposObrigatorios = ['codigo',' nome', 'password', 'telefone'];
 
     const camposFaltando = camposObrigatorios.filter(campo => !body[campo]);
 
