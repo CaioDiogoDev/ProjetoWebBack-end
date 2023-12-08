@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 require("dotenv").config();
 
-const routes = require('./routes')
+const routes = require('./routes');
 
 const swaggerAutogen = require('swagger-autogen')();
 

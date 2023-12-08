@@ -1,6 +1,5 @@
-const { DataTypes } = require("sequelize")
-const sequelize = require('./connection')
-const userModel = require('./usersModel')
+const { DataTypes } = require("sequelize");
+const sequelize = require('./connection');
 
 const Prontuario = sequelize.define('Pronturario', {
 

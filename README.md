@@ -74,5 +74,5 @@ atendidos deverão apresentar na próxima aula.
 2. Comando para rodar projeto npm start.
 3. Rodar a rota /install para criar os dados. 
 4. Caso realize alguma alteração nas rotas necessario atualizar a documentação com o seguinte comando npm start  generate-swagger.
-
+5. Para facilitar os testes das rotas utilizar a rota /docs. 
 
