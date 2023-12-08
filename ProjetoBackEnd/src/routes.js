@@ -14,6 +14,8 @@ router.post('/cadastroUsuario', validador.verificaCadastroUsuario, controller.ca
 
 router.put('/atualizaCadastro', validador.verificaUpdateUsuario, controller.UpdateUsuario);
 
+router.get('/ListarProntuario', validador.verificaEntradalistar, controller.ListaProntuario)
+
 router.use(validador.verificaToken); 
 
 router.put('/atualizaCadastroAdmin', validador.verificaUpdateUsuario, controller.UpdateUsuario);

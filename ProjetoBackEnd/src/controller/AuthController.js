@@ -129,13 +129,24 @@ const deleteProntuario = async (req, res) => {
 
 const UpdateProntuario = async (req, res) => {
     try {
-      const result =  await ProntuarioModel.update(req.body.codigo, req.body.paciente, req.body.situacaoPaciente, req.body.remedioPrescrito, req.body.sintomas);
-      console.log(result)
+        const result = await ProntuarioModel.update(req.body.codigo, req.body.paciente, req.body.situacaoPaciente, req.body.remedioPrescrito, req.body.sintomas);
+        console.log(result)
         return res.status(201).json({ mensagem: 'Prontuario atualizado com sucesso' });
 
     } catch (error) {
         return res.status(500).json({ error: 'AuthController - Falha ao tentar atualizar prontuario' });
     }
+}
+
+const ListaProntuario = async (req, res) => {
+    try {
+        const { page, limit } = req.query;
+        const prontuarios = await ProntuarioModel.list(page, limit);
+    
+        res.json(prontuarios);
+      } catch (error) {
+        res.status(500).json({ error: 'AuthController - Erro ao recuperar itens' });
+      }
 }
 
 
@@ -147,5 +158,6 @@ module.exports = {
     deleteUsuario,
     UpdateUsuario,
     deleteProntuario,
-    UpdateProntuario
+    UpdateProntuario,
+    ListaProntuario
 };

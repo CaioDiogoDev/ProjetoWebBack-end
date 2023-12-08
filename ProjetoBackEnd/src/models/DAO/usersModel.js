@@ -116,6 +116,5 @@ module.exports = {
             console.error('Usuarios model - Falha ao deletar usuarios:', error);
             throw error; 
         }
-    },
-
+    }
 }

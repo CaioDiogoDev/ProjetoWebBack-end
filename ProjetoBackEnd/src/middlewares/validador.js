@@ -52,7 +52,7 @@ const verificaCadastroAdmin = (req, res, next) => {
 const verificaDeleteUsuario = (req, res, next) => {
     const { body } = req;
     const camposObrigatorios = ['nome', 'password', 'telefone', 'codigo'];
-    
+
     const camposFaltando = camposObrigatorios.filter(campo => !body[campo]);
 
     if (camposFaltando.length > 0) {
@@ -83,13 +83,23 @@ const verificaDeleteProntuario = (req, res, next) => {
 const verificaUpdateProntuario = (req, res, next) => {
     const { body } = req;
     const camposObrigatorios = ['situacaoPaciente', 'remedioPrescrito', 'sintomas'];
-    
+
     const camposFaltando = camposObrigatorios.filter(campo => !body[campo]);
 
     if (camposFaltando.length > 0) {
         const mensagemErro = `Campos obrigatórios faltando: ${camposFaltando.join(', ')}`;
         return res.status(400).json({ message: mensagemErro });
     }
+    next();
+}
+
+const verificaEntradalistar = (req, res, next) => {
+    const { pagina, limite } = req.query;
+    if (!pagina || !limite) {
+        return res.status(400).json({ error: 'Os parâmetros paginam e limite são obrigatórios.' });
+    }
+    console.log(pagina, limite)
+
     next();
 }
 
@@ -102,6 +112,7 @@ module.exports = {
     verificaDeleteUsuario,
     verificaUpdateUsuario,
     verificaDeleteProntuario,
-    verificaUpdateProntuario
+    verificaUpdateProntuario,
+    verificaEntradalistar
 
 }
