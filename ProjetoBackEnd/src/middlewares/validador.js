@@ -98,8 +98,6 @@ const verificaEntradalistar = (req, res, next) => {
     if (!pagina || !limite) {
         return res.status(400).json({ error: 'Os parâmetros paginam e limite são obrigatórios.' });
     }
-    console.log(pagina, limite)
-
     next();
 }
 

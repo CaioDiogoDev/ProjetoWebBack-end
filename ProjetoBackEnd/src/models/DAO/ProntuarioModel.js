@@ -49,22 +49,20 @@ module.exports = {
             throw error;
         }
     },
-    list: async function (pagina = 1, limite = 10) {
+    list: async function (pagina , limite) {
         try {
-            const pageNumber = parseInt(pagina, 10) || 1;
-            const itemsPerPage = parseInt(limite, 10) || 10;
-
-            const prontuarios = await Prontuario.findAll({
-                offset: (pageNumber - 1) * itemsPerPage,
-                limit: itemsPerPage,
-            });
-
-            return prontuarios;
+          
+          const { rows: prontuarios } = await Prontuario.findAndCountAll({
+            offset: (pagina - 1) * limite,
+            limit: limite,
+          });
+      
+          return { prontuarios};
         } catch (error) {
-            console.error('Prontuario model - Falha ao listar prontuarios:', error);
-            throw error;
+          console.error('Prontuario model - Falha ao listar prontuarios:', error);
+          throw error;
         }
-    },
+      },
 
 
     update: async function (codigo, paciente, situacaoPaciente, remedioPrescrito, sintomas) {

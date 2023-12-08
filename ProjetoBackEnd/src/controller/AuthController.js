@@ -27,7 +27,7 @@ const verificarLogin = async (req, res) => {
             return res.status(401).json({ error: 'Acesso não permitido' });
         }
     } catch (error) {
-        return res.status(500).json({ error: 'Erro interno do servidor' });
+        return res.status(500).json({ error: 'AuthController - Erro interno do servidor' });
     }
 };
 
@@ -56,7 +56,18 @@ const install = async (req, res) => {
             { dataRegistro: "2023-08-26", paciente: "pedro", situacaoPaciente: "gripe", remedioPrescrito: "dramin", sintomas: "dor no corpo, dor de cabeça" },
             { dataRegistro: "2023-05-26", paciente: "manuel", situacaoPaciente: "diarreia", remedioPrescrito: "imosec", sintomas: "dor no corpo, dor de cabeça" },
             { dataRegistro: "2023-07-26", paciente: "henrique", situacaoPaciente: "tontura", remedioPrescrito: "dramin", sintomas: "dor no corpo, dor de cabeça" },
-            { dataRegistro: "2023-10-26", paciente: "eduardo", situacaoPaciente: "covid", remedioPrescrito: "ibuprofeno", sintomas: "dor no corpo, dor de cabeça" }
+            { dataRegistro: "2023-10-26", paciente: "eduardo", situacaoPaciente: "covid", remedioPrescrito: "ibuprofeno", sintomas: "dor no corpo, dor de cabeça" },
+            { dataRegistro: "2023-03-18", paciente: "lucas", situacaoPaciente: "conjuntivite", remedioPrescrito: "colírio", sintomas: "olhos vermelhos, coceira" },
+            { dataRegistro: "2023-01-25", paciente: "gabriel", situacaoPaciente: "rinite alérgica", remedioPrescrito: "anti-histamínico", sintomas: "espirros frequentes, coriza" },
+            { dataRegistro: "2023-04-05", paciente: "victor", situacaoPaciente: "enxaqueca", remedioPrescrito: "relaxante muscular", sintomas: "dor intensa na cabeça" },
+            { dataRegistro: "2023-02-10", paciente: "mariana", situacaoPaciente: "insônia", remedioPrescrito: "sedativo", sintomas: "dificuldade para dormir" },
+            { dataRegistro: "2023-05-20", paciente: "amanda", situacaoPaciente: "alergia cutânea", remedioPrescrito: "antialérgico", sintomas: "coceira na pele" },
+            { dataRegistro: "2023-06-29", paciente: "rafael", situacaoPaciente: "torção no tornozelo", remedioPrescrito: "anti-inflamatório", sintomas: "dor e inchaço no tornozelo" },
+            { dataRegistro: "2023-07-14", paciente: "isabela", situacaoPaciente: "ansiedade", remedioPrescrito: "ansiolítico", sintomas: "nervosismo, inquietação" },
+            { dataRegistro: "2023-09-05", paciente: "bruno", situacaoPaciente: "alergia alimentar", remedioPrescrito: "anti-histamínico", sintomas: "inchaço, coceira na boca" },
+            { dataRegistro: "2023-11-01", paciente: "fernanda", situacaoPaciente: "sinusite", remedioPrescrito: "descongestionante", sintomas: "congestão nasal, dor facial" },
+            { dataRegistro: "2023-08-22", paciente: "gustavo", situacaoPaciente: "gastrite", remedioPrescrito: "protetor gástrico", sintomas: "dor no estômago" }
+            
         ];
 
         const usuariosPromises = usuariosData.map(data => UsersModel.save(data.nome, data.telefone, data.password, data.tipoUsuario));
@@ -64,7 +75,7 @@ const install = async (req, res) => {
         await Promise.all([...usuariosPromises, ...prontuariosPromises]);
         return res.status(201).json({ mensagem: 'Instalação concluida com sucesso' });
     } catch (error) {
-        return res.status(500).json({ mensagem: 'Erro na instalação.' });
+        return res.status(500).json({ mensagem: 'AuthController - Erro na instalação.' });
     }
 
 }
@@ -74,7 +85,7 @@ const cadastroEnfermeira = async (req, res) => {
         const cadastroUser = await UsersModel.save(req.body.nome, req.body.password, req.body.telefone, "enfermeira");
         return res.status(201).json({ mensagem: 'Cadastro do usuario realizado com sucesso', cadastroUser });
     } catch (error) {
-        return res.status(500).json({ error: 'Erro no cadastro da enfermeira' });
+        return res.status(500).json({ error: 'AuthController - Erro no cadastro da enfermeira' });
     }
 
 }
@@ -84,7 +95,7 @@ const cadastroMedico = async (req, res) => {
         return res.status(201).json({ mensagem: 'Cadastro do admin realizado com sucesso', usuario: cadastroAdmin });
 
     } catch (error) {
-        return res.status(500).json({ error: 'Erro no cadastro do medico' });
+        return res.status(500).json({ error: 'AuthController - Erro no cadastro do medico' });
     }
 };
 
@@ -94,7 +105,7 @@ const deleteUsuario = async (req, res) => {
         return res.status(200).json({ mensagem: 'Usuario excluido com sucesso', usuario: usuarioDeletado });
 
     } catch (error) {
-        return res.status(500).json({ error: 'Falha do tentar excluir usuario' });
+        return res.status(500).json({ error: 'AuthController - Falha do tentar excluir usuario' });
     }
 };
 
@@ -112,7 +123,7 @@ const UpdateUsuario = async (req, res) => {
             return res.status(404).json({ mensagem: 'Nenhum dado atualizado' })
         }
     } catch (error) {
-        return res.status(500).json({ error: 'Falha ao tentar realizar atualização do cadastro' });
+        return res.status(500).json({ error: 'AuthController - Falha ao tentar realizar atualização do cadastro' });
     }
 }
 
@@ -123,7 +134,7 @@ const deleteProntuario = async (req, res) => {
         return res.status(200).json({ mensagem: 'Prontuario excluido com sucesso' });
 
     } catch (error) {
-        return res.status(500).json({ error: 'Falha ao tentar excluir prontuario' });
+        return res.status(500).json({ error: 'AuthController - Falha ao tentar excluir prontuario' });
     }
 }
 
@@ -140,8 +151,12 @@ const UpdateProntuario = async (req, res) => {
 
 const ListaProntuario = async (req, res) => {
     try {
-        const { page, limit } = req.query;
-        const prontuarios = await ProntuarioModel.list(page, limit);
+        const { pagina, limite } = req.query;
+
+        const numPagina = parseInt(pagina, 10);
+        const ItensPagina = parseInt(limite, 10);
+
+        const prontuarios = await ProntuarioModel.list(numPagina, ItensPagina);
     
         res.json(prontuarios);
       } catch (error) {
