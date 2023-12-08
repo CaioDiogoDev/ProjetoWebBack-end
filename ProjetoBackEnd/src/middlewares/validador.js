@@ -27,24 +27,39 @@ function verificaToken(req, res, next) {
 
 const verificaBodyLogin = (req, res, next) => {
     const { body } = req;
-    if (!body.nome || !body.password) {
-        return res.status(400).json({ message: 'Necessario informar nome  e password' })
+    const camposObrigatorios = ['nome', 'password'];
+
+    const camposFaltando = camposObrigatorios.filter(campo => !body[campo]);
+
+    if (camposFaltando.length > 0) {
+        const mensagemErro = `Campos obrigatórios faltando: ${camposFaltando.join(', ')}`;
+        return res.status(400).json({ message: mensagemErro });
     }
     next();
 }
 
 const verificaCadastroUsuario = (req, res, next) => {
     const { body } = req;
-    if (!body.nome && !body.password && !body.telefone) {
-        return res.status(400).json({ message: 'Necessario informar nome, senha, telefone.' })
+    const camposObrigatorios = ['nome', 'password', 'telefone'];
+
+    const camposFaltando = camposObrigatorios.filter(campo => !body[campo]);
+
+    if (camposFaltando.length > 0) {
+        const mensagemErro = `Campos obrigatórios faltando: ${camposFaltando.join(', ')}`;
+        return res.status(400).json({ message: mensagemErro });
     }
     next();
 }
 
 const verificaCadastroAdmin = (req, res, next) => {
     const { body } = req;
-    if (!body.nome && !body.password && !body.telefone) {
-        return res.status(400).json({ message: 'Necessario todos os dados para cadastro de novos administradores' })
+    const camposObrigatorios = ['nome', 'password', 'telefone'];
+
+    const camposFaltando = camposObrigatorios.filter(campo => !body[campo]);
+
+    if (camposFaltando.length > 0) {
+        const mensagemErro = `Campos obrigatórios faltando: ${camposFaltando.join(', ')}`;
+        return res.status(400).json({ message: mensagemErro });
     }
     next();
 }
@@ -63,21 +78,29 @@ const verificaDeleteUsuario = (req, res, next) => {
 }
 
 const verificaUpdateUsuario = (req, res, next) => {
-    console
     const { body } = req;
-    if (!body.nome && !body.telefone && !body.password, !body.codigo) {
-        return res.status(400).json({ message: 'Necessario informar nome, password, telefone e codigo para atualiazar dados.' })
+    const camposObrigatorios = ['nome', 'telefone', 'password', 'codigo'];
+
+    const camposFaltando = camposObrigatorios.filter(campo => !body[campo]);
+
+    if (camposFaltando.length > 0) {
+        const mensagemErro = `Campos obrigatórios faltando: ${camposFaltando.join(', ')}`;
+        return res.status(400).json({ message: mensagemErro });
     }
     next();
 }
 
 const verificaDeleteProntuario = (req, res, next) => {
     const { body } = req;
-    if (!body.codigo && !body.paciente && !body.dataregistro && !body.codigo) {
-        return res.status(400).json({ message: 'Necessario informar esses dados para remover prontuario.' })
+    const camposObrigatorios = ['paciente', 'dataregistro', 'codigo'];
+
+    const camposFaltando = camposObrigatorios.filter(campo => !body[campo]);
+
+    if (camposFaltando.length > 0) {
+        const mensagemErro = `Campos obrigatórios faltando: ${camposFaltando.join(', ')}`;
+        return res.status(400).json({ message: mensagemErro });
     }
     next();
-
 }
 
 const verificaUpdateProntuario = (req, res, next) => {
