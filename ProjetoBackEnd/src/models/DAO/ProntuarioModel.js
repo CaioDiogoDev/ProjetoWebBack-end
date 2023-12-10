@@ -48,20 +48,20 @@ module.exports = {
             throw error;
         }
     },
-    list: async function (pagina , limite) {
+    list: async function (pagina, limite) {
         try {
-          
-          const { rows: prontuarios } = await Prontuario.findAndCountAll({
-            offset: (pagina - 1) * limite,
-            limit: limite,
-          });
-      
-          return { prontuarios};
+
+            const { rows: prontuarios } = await Prontuario.findAndCountAll({
+                offset: (pagina - 1) * limite,
+                limit: limite,
+            });
+
+            return { prontuarios };
         } catch (error) {
-          console.error('Prontuario model - Falha ao listar prontuarios:', error);
-          throw error;
+            console.error('Prontuario model - Falha ao listar prontuarios:', error);
+            throw error;
         }
-      },
+    },
 
 
     update: async function (codigo, paciente, situacaoPaciente, remedioPrescrito, sintomas) {
@@ -98,6 +98,20 @@ module.exports = {
         }
         catch (error) {
             console.error('Prontuario model - Falha ao deletar prontuario:', error);
+            throw error;
+        }
+    },
+    listDate: async function (dataRegistro) {
+        try {
+            const prontuario = await Prontuario.findAll({
+                where: {
+                    dataRegistro: dataRegistro
+                }
+            })
+            console.log(prontuario)
+            return prontuario;
+        } catch (error) {
+            console.error('Prontuario model - Falha ao listar pronturarios:', error);
             throw error;
         }
     }

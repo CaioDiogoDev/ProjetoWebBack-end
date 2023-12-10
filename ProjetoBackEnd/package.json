@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "generate-swagger": "node swagger-config.js",
-    "start": "nodemon src/main.js"
+    "start": "nodemon src/main.js",
+    "generate-swagger": "node src/swagger_config.js"
   },
   "nodemonConfig": {
     "ignore": ["swagger_output.json"]

@@ -14,7 +14,7 @@ function verificaToken(req, res, next) {
 
     const tokenSemBearer = tokenComBearer.replace('Bearer ', '').trim();
     console.log(tokenSemBearer)
-    
+
 
     jwt.verify(tokenSemBearer, process.env.SECRET, (erro) => {
         if (erro) {
@@ -54,7 +54,7 @@ const verificaCadastroUsuario = (req, res, next) => {
 
 const verificaCadastroAdmin = (req, res, next) => {
     const { body } = req;
-    const camposObrigatorios = ['codigo',' nome', 'password', 'telefone'];
+    const camposObrigatorios = ['codigo', ' nome', 'password', 'telefone'];
 
     const camposFaltando = camposObrigatorios.filter(campo => !body[campo]);
 
@@ -120,11 +120,19 @@ const verificaUpdateProntuario = (req, res, next) => {
 const verificaEntradalistar = (req, res, next) => {
     const { pagina, limite } = req.query;
     if (!pagina || !limite) {
-        return res.status(400).json({ error: 'Os parâmetros paginam e limite são obrigatórios.' });
+        return res.status(400).json({ error: 'Os parâmetros pagina e limite são obrigatórios.' });
     }
     next();
 }
 
+const verificaEntradaListarData = (req, res, next) => {
+    console.log('estou aqui porra')
+    const { dataRegistro } = req.query;
+    if (!dataRegistro) {
+        return res.status(400).json({ error: 'Necessario informar a data.' });
+    }
+    next();
+}
 
 module.exports = {
     verificaToken,
@@ -135,6 +143,6 @@ module.exports = {
     verificaUpdateUsuario,
     verificaDeleteProntuario,
     verificaUpdateProntuario,
-    verificaEntradalistar
-
+    verificaEntradalistar,
+    verificaEntradaListarData
 }

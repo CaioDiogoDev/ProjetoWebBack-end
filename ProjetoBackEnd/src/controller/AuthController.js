@@ -67,7 +67,7 @@ const install = async (req, res) => {
             { dataRegistro: "2023-09-05", paciente: "bruno", situacaoPaciente: "alergia alimentar", remedioPrescrito: "anti-histamínico", sintomas: "inchaço, coceira na boca" },
             { dataRegistro: "2023-11-01", paciente: "fernanda", situacaoPaciente: "sinusite", remedioPrescrito: "descongestionante", sintomas: "congestão nasal, dor facial" },
             { dataRegistro: "2023-08-22", paciente: "gustavo", situacaoPaciente: "gastrite", remedioPrescrito: "protetor gástrico", sintomas: "dor no estômago" }
-            
+
         ];
 
         const usuariosPromises = usuariosData.map(data => UsersModel.save(data.nome, data.telefone, data.password, data.tipoUsuario));
@@ -157,12 +157,26 @@ const ListaProntuario = async (req, res) => {
         const ItensPagina = parseInt(limite, 10);
 
         const prontuarios = await ProntuarioModel.list(numPagina, ItensPagina);
-    
+
         res.json(prontuarios);
-      } catch (error) {
+    } catch (error) {
         res.status(500).json({ error: 'AuthController - Erro ao recuperar itens' });
-      }
+    }
 }
+
+const ListaProntuarioPorData = async (req, res) => {
+    try {
+        const { dataRegistro } = req.query;
+        console.log(dataRegistro)
+
+        const prontuarios = await ProntuarioModel.listDate(dataRegistro);
+
+        res.json(prontuarios);
+    } catch (error) {
+        res.status(500).json({ error: 'AuthController - Erro para listar por data' });
+    }
+}
+
 
 
 module.exports = {
@@ -174,5 +188,6 @@ module.exports = {
     UpdateUsuario,
     deleteProntuario,
     UpdateProntuario,
-    ListaProntuario
+    ListaProntuario,
+    ListaProntuarioPorData
 };

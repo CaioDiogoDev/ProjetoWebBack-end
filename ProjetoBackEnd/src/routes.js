@@ -18,6 +18,8 @@ router.put('/atualizaCadastro', validador.verificaUpdateUsuario, controller.Upda
 
 router.get('/ListarProntuario', validador.verificaEntradalistar, controller.ListaProntuario);
 
+router.get('/ListarProntuarioPorData', validador.verificaEntradaListarData, controller.ListaProntuarioPorData);
+
 router.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 router.use(validador.verificaToken); 
@@ -30,7 +32,7 @@ router.delete('/deleteUsuario', validador.verificaDeleteUsuario, controller.dele
 
 router.delete('/deleteProntuario', validador.verificaDeleteProntuario, controller.deleteProntuario);
 
-router.put('/atualizaProntuario', validador.verificaUpdateProntuario, controller.UpdateProntuario)
+router.put('/atualizaProntuario', validador.verificaUpdateProntuario, controller.UpdateProntuario);
 
 
 module.exports = router;
